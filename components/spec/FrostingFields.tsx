@@ -2,36 +2,44 @@
 
 import { frostingTypes, type CakeSpec } from "@/lib/taxonomy";
 import { SpecEntry } from "@/components/SpecEntry";
+import { SpecSelect } from "@/components/SpecSelect";
 import { setConfidence } from "@/components/spec/set-confidence";
 
-export function FrostingFields(props: { spec: CakeSpec; onChange: (spec: CakeSpec) => void }) {
+export function FrostingFields(props: {
+  spec: CakeSpec;
+  onChange: (spec: CakeSpec) => void;
+  expanded: boolean;
+  onHeaderClick: () => void;
+}) {
   const spec = props.spec;
   return (
-    <SpecEntry category="frosting" label="Frosting" lowConfidence={spec.confidence.frosting < 0.6}>
-      <select
-        className="mt-2 min-h-11 w-full border border-ink bg-icing px-2"
+    <SpecEntry
+      category="frosting"
+      label="Frosting"
+      lowConfidence={spec.confidence.frosting < 0.6}
+      expanded={props.expanded}
+      onHeaderClick={props.onHeaderClick}
+    >
+      <p className="spec-label mt-2">Primary</p>
+      <SpecSelect
+        aria-label="Primary frosting"
         value={spec.frosting.primary}
-        onChange={(e) =>
+        options={frostingTypes.map((type) => ({ value: type.id, label: type.label }))}
+        onChange={(value) =>
           props.onChange(
             setConfidence(
               {
                 ...spec,
                 frosting: {
                   ...spec.frosting,
-                  primary: e.target.value as typeof spec.frosting.primary,
+                  primary: value as typeof spec.frosting.primary,
                 },
               },
               "frosting",
             ),
           )
         }
-      >
-        {frostingTypes.map((type) => (
-          <option key={type.id} value={type.id}>
-            {type.label}
-          </option>
-        ))}
-      </select>
+      />
     </SpecEntry>
   );
 }

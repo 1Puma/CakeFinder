@@ -10,5 +10,5 @@ export default async function IntakeSheetPage({
   const { bakeryId, id } = await params;
   const decorators = await listDecorators(getEnv().DEFAULT_CITY);
   const bakery = decorators.find((d) => d.id === bakeryId);
-  return <IntakeSheetView specId={id} bakeryName={bakery?.name ?? "Bakery"} />;
+  return <IntakeSheetView specId={id} bakeryId={bakeryId} bakeryName={bakery?.name ?? "Bakery"} />;
 }

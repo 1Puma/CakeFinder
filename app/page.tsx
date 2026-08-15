@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
-import { ExplodedCakeMark } from "@/components/ExplodedCakeMark";
+import { LandingHeroCake } from "@/components/LandingHeroCake";
 import { UploadDropzone } from "@/components/UploadDropzone";
 import { SpecimenGrid } from "@/components/SpecimenGrid";
 
@@ -9,41 +9,28 @@ export default function HomePage() {
     <div>
       <SiteHeader
         trailing={
-          <a className="min-h-11 px-3 py-3" href="#how">
+          <a className="min-h-11 px-3 py-3" href="#specimens">
             How it works
           </a>
         }
       />
-      <section className="grid items-center gap-10 px-4 py-10 md:grid-cols-2 md:px-6 md:py-16">
-        <ExplodedCakeMark />
+      <section className="grid items-start gap-10 px-4 py-10 md:px-6 md:py-16 desk:grid-cols-2">
+        <LandingHeroCake />
         <div>
-          <p className="max-w-md text-[18px]">
+          <h1 className="max-w-xl font-display text-[34px] leading-tight text-ink desk:text-[52px]">
             Every custom cake order starts with a screenshot and a guess.
+          </h1>
+          <p className="mt-4 max-w-md text-[18px]">
+            Upload the photo. Get the spec. Find who can build it.
           </p>
-          <p className="mt-3 max-w-md">Upload the photo. Get the spec. Find who can build it.</p>
           <div className="mt-6 max-w-lg">
             <UploadDropzone />
           </div>
         </div>
       </section>
-      <section id="how" className="border-t border-ink px-4 py-10 md:px-6">
-        <h2 className="mb-6 font-display text-[34px]">The problem</h2>
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="border border-ink bg-butter p-4">
-            <h3 className="font-display text-xl">Supermarket tools</h3>
-            <p className="mt-2">Make you pick from a menu. The cake you saw is not on it.</p>
-          </div>
-          <div className="border border-ink bg-butter p-4">
-            <h3 className="font-display text-xl">Image generators</h3>
-            <p className="mt-2">Hand you an unbuildable picture and tell you to show a baker.</p>
-          </div>
-          <div className="border border-ink bg-butter p-4">
-            <h3 className="font-display text-xl">DMing bakers</h3>
-            <p className="mt-2">Takes days and usually ends in a compromise.</p>
-          </div>
-        </div>
-      </section>
-      <SpecimenGrid />
+      <div id="specimens">
+        <SpecimenGrid />
+      </div>
       <section className="border-t border-ink px-4 py-10 md:px-6">
         <h2 className="font-display text-[34px]">For bakeries</h2>
         <p className="mt-3 max-w-xl">

@@ -1,18 +1,13 @@
 :root {
-  --ink: #1f2d3d;
-  --icing: #fff2cc;
-  --butter: #ffe599;
-  --sunflower: #fdce40;
-  --rose: #ef89bb;
-  --sky: #6fa8dc;
-  --gel-structure: #6fa8dc;
-  --gel-frosting: #fdce40;
-  --gel-piping: #ef89bb;
-  --gel-decor: #c45a94;
-  --gel-finish: #3a6ea3;
-  --slate-60: #5c5346;
-  --amber-flag: #b8860b;
-  --hairline: #1f2d3d;
+  --ink-violet: #3d1e5c;
+  --icing-white: #f7f8fa;
+  --gel-teal: #2fb8af;
+  --gel-coral: #e23d2e;
+  --gel-marigold: #f5b02e;
+  --gel-lilac: #c4b5e8;
+  --gel-plum: #7b4ba8;
+  --slate-60: #6b6478;
+  --amber-flag: #c77700;
 
   --radius-data: 2px;
   --radius-image: 16px;
@@ -31,25 +26,37 @@
   --bp-md: 768px;
   --bp-lg: 1120px;
 
+  --ink: var(--ink-violet);
+  --icing: var(--icing-white);
+  --gel-structure: var(--gel-teal);
+  --gel-frosting: var(--gel-marigold);
+  --gel-piping: var(--gel-coral);
+  --gel-decor: var(--gel-lilac);
+  --gel-finish: var(--gel-plum);
+  --hairline: var(--ink-violet);
+  --ink-12: color-mix(in srgb, var(--ink-violet) 12%, transparent);
+
   --font-display-stack: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
   --font-body-stack: var(--font-body-face), ui-sans-serif, system-ui, sans-serif;
   --font-data-stack: var(--font-data-face), ui-monospace, monospace;
-
-  --shadow-explode: 0 12px 32px rgb(31 45 61 / 0.18);
+  --font-display: var(--font-display-stack);
+  --font-body: var(--font-body-stack);
+  --font-data: var(--font-data-stack);
 }
 
 @theme inline {
-  --color-ink: var(--ink);
-  --color-icing: var(--icing);
-  --color-butter: var(--butter);
-  --color-sunflower: var(--sunflower);
-  --color-rose: var(--rose);
-  --color-sky: var(--sky);
-  --color-gel-structure: var(--gel-structure);
-  --color-gel-frosting: var(--gel-frosting);
-  --color-gel-piping: var(--gel-piping);
-  --color-gel-decor: var(--gel-decor);
-  --color-gel-finish: var(--gel-finish);
+  --color-ink: var(--ink-violet);
+  --color-icing: var(--icing-white);
+  --color-gel-teal: var(--gel-teal);
+  --color-gel-coral: var(--gel-coral);
+  --color-gel-marigold: var(--gel-marigold);
+  --color-gel-lilac: var(--gel-lilac);
+  --color-gel-plum: var(--gel-plum);
+  --color-gel-structure: var(--gel-teal);
+  --color-gel-frosting: var(--gel-marigold);
+  --color-gel-piping: var(--gel-coral);
+  --color-gel-decor: var(--gel-lilac);
+  --color-gel-finish: var(--gel-plum);
   --color-slate: var(--slate-60);
   --color-flag: var(--amber-flag);
   --font-display: var(--font-display-stack);
@@ -57,27 +64,30 @@
   --font-data: var(--font-data-stack);
   --radius-data: var(--radius-data);
   --radius-image: var(--radius-image);
+  --breakpoint-desk: 1120px;
 }
 
 html,
 body {
-  background: var(--icing);
-  color: var(--ink);
-  font-family: var(--font-body-stack);
+  background: var(--icing-white);
+  color: var(--ink-violet);
+  font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.45;
+  overflow-x: hidden;
 }
 
 h1,
 h2,
 h3 {
-  font-family: var(--font-display-stack);
+  font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
-.data {
-  font-family: var(--font-data-stack);
+.data,
+.font-data {
+  font-family: var(--font-data);
   letter-spacing: 0.02em;
 }
 
@@ -94,7 +104,7 @@ textarea {
 }
 
 :focus-visible {
-  outline: 2px solid var(--sky);
+  outline: 2px solid var(--gel-teal);
   outline-offset: 2px;
 }
 
@@ -105,15 +115,17 @@ textarea {
   min-height: 44px;
   min-width: 44px;
   padding: 0 var(--space-4);
-  background: var(--sunflower);
-  border: 1px solid var(--ink);
+  background: var(--ink-violet);
+  color: var(--icing-white);
+  border: 1px solid var(--ink-violet);
   border-radius: var(--radius-data);
   font-weight: 500;
   cursor: pointer;
 }
 
 .btn-quiet {
-  background: var(--butter);
+  background: var(--icing-white);
+  color: var(--ink-violet);
 }
 
 .btn:disabled {
@@ -122,13 +134,44 @@ textarea {
 }
 
 .hairline {
-  border: 1px solid var(--ink);
+  border: 1px solid var(--ink-violet);
 }
 
 .panel {
-  background: var(--butter);
-  border: 1px solid var(--ink);
+  background: var(--icing-white);
+  border: 1px solid var(--ink-violet);
   border-radius: var(--radius-data);
+}
+
+.spec-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--slate-60);
+}
+
+.spec-value {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink-violet);
+}
+
+.spec-select {
+  border-radius: var(--radius-data);
+  border: 1px solid var(--ink-12);
+  background: var(--icing-white);
+}
+
+.trace-line {
+  animation: trace-in var(--motion-state) both;
+}
+
+@keyframes trace-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

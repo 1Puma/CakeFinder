@@ -5,10 +5,11 @@ test("demo flow: example spec, edit, match", async ({ page }) => {
   await expect(page.getByRole("link", { name: "CakeMatch" })).toBeVisible();
   await page.getByRole("button", { name: /Three-tier fondant/ }).click();
   await page.waitForURL(/\/spec\//, { timeout: 30_000 });
-  await expect(page.getByPlaceholder(/make it two tiers/)).toBeVisible();
-  await page.getByPlaceholder(/make it two tiers/).fill("make it two tiers and drop the gold leaf");
+  await expect(page.getByPlaceholder("describe a change")).toBeVisible();
+  await page.getByPlaceholder("describe a change").fill("make it two tiers and drop the gold leaf");
   await page.locator("form").getByRole("button", { name: "Apply" }).click();
   await expect(page.getByText("Confirm these edits")).toBeVisible();
+  await expect(page.getByText("3 tiers → 2 tiers")).toBeVisible();
   await page
     .getByText("Confirm these edits")
     .locator("..")

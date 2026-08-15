@@ -30,7 +30,7 @@ export function applyNaturalLanguageFallback(
         "structure.tierCount",
         spec.structure.tierCount,
         2,
-        `Reduced from ${spec.structure.tierCount} tiers to 2`,
+        `${spec.structure.tierCount} tiers → 2 tiers`,
       ),
     );
   }
@@ -41,7 +41,7 @@ export function applyNaturalLanguageFallback(
   ) {
     patch.push({ op: "replace", path: "/finish/metallicLeaf", value: "none" });
     changes.push(
-      change("finish.metallicLeaf", spec.finish.metallicLeaf, "none", "Dropped gold leaf"),
+      change("finish.metallicLeaf", spec.finish.metallicLeaf, "none", "gold leaf → none"),
     );
   }
 
@@ -59,7 +59,12 @@ export function applyNaturalLanguageFallback(
         value: lookupBorderTip(type),
       });
       changes.push(
-        change("piping.borders.0.type", firstBorder.type, type, `Changed border to ${type}`),
+        change(
+          "piping.borders.0.type",
+          firstBorder.type,
+          type,
+          `${firstBorder.type} border → ${type} border`,
+        ),
       );
     }
   }

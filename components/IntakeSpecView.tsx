@@ -8,6 +8,7 @@ import { persistSpec, readPersistedSpec } from "@/lib/spec-cache";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SpecEditor } from "@/components/SpecEditor";
 import { ExplodedView } from "@/components/ExplodedView";
+import { useMinWidth } from "@/lib/use-min-width";
 import type { Decorator } from "@/lib/types";
 
 export function IntakeSpecView(props: {
@@ -18,6 +19,8 @@ export function IntakeSpecView(props: {
 }) {
   const [spec, setSpec] = useState<CakeSpec | null>(null);
   const [active, setActive] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const tablet = useMinWidth(768);
 
   useEffect(() => {
     const local = readPersistedSpec(props.specId);
@@ -32,11 +35,23 @@ export function IntakeSpecView(props: {
         if (record.spec) {
           persistSpec(record.spec);
           setSpec(record.spec);
+        } else {
+          setError("Spec not found. Upload a photo on this bakery's intake page.");
         }
       })
-      .catch(() => undefined);
+      .catch(() => setError("Spec not found. Upload a photo on this bakery's intake page."));
   }, [props.specId]);
 
+  if (error) {
+    return (
+      <main className="p-6">
+        <p>{error}</p>
+        <Link className="btn mt-4 inline-flex" href={`/intake/${props.bakeryId}`}>
+          Upload a photo
+        </Link>
+      </main>
+    );
+  }
   if (!spec) {
     return (
       <main className="p-6">
@@ -52,13 +67,13 @@ export function IntakeSpecView(props: {
   return (
     <div>
       <SiteHeader trailing={<span className="data text-[13px]">{props.bakeryName}</span>} />
-      <div className="grid lg:grid-cols-2">
+      <div className="grid min-w-0 md:grid-cols-[55%_45%] desk:grid-cols-[60%_40%]">
         <div className="p-4">
-          <ExplodedView spec={spec} activeId={active} onSelect={setActive} />
+          <ExplodedView spec={spec} activeId={active} />
         </div>
         <div className="p-4">
           {cannot.length > 0 ? (
-            <p className="mb-3 border-l-[3px] border-[var(--amber-flag)] bg-butter px-3 py-2">
+            <p className="mb-3 border-l-[3px] border-[var(--amber-flag)] bg-icing px-3 py-2">
               Cannot fulfill before quoting: {cannot.join(", ")}. Flag this to the bench.
             </p>
           ) : (
@@ -66,7 +81,9 @@ export function IntakeSpecView(props: {
           )}
           <SpecEditor
             spec={spec}
-            accordion
+            accordion={!tablet}
+            activeId={active}
+            onSelect={setActive}
             onChange={(next) => {
               persistSpec(next);
               setSpec(next);

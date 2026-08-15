@@ -2,10 +2,16 @@
 
 import type { CakeSpec } from "@/lib/taxonomy";
 import { SpecEntry } from "@/components/SpecEntry";
+import { SpecSelect } from "@/components/SpecSelect";
 import { metallicLeafValues } from "@/lib/taxonomy";
 import { setConfidence } from "@/components/spec/set-confidence";
 
-export function DecorFields(props: { spec: CakeSpec }) {
+export function DecorFields(props: {
+  spec: CakeSpec;
+  expanded: boolean;
+  onHeaderClick: () => void;
+  onSelect: (id: string) => void;
+}) {
   const spec = props.spec;
   return (
     <SpecEntry
@@ -13,6 +19,11 @@ export function DecorFields(props: { spec: CakeSpec }) {
       label="Decor"
       lowConfidence={spec.confidence.decor < 0.6}
       flagged={spec.decor.licensedCharacters.length > 0}
+      expanded={props.expanded}
+      onHeaderClick={() => {
+        props.onHeaderClick();
+        if (spec.decor.ediblePrint) props.onSelect("print");
+      }}
     >
       <p>
         {spec.decor.ediblePrint
@@ -29,34 +40,44 @@ export function DecorFields(props: { spec: CakeSpec }) {
   );
 }
 
-export function FinishFields(props: { spec: CakeSpec; onChange: (spec: CakeSpec) => void }) {
+export function FinishFields(props: {
+  spec: CakeSpec;
+  onChange: (spec: CakeSpec) => void;
+  expanded: boolean;
+  onHeaderClick: () => void;
+}) {
   const spec = props.spec;
   return (
-    <SpecEntry category="finish" label="Finish" lowConfidence={spec.confidence.finish < 0.6}>
-      <select
-        className="mt-2 min-h-11 w-full border border-ink bg-icing px-2"
+    <SpecEntry
+      category="finish"
+      label="Finish"
+      lowConfidence={spec.confidence.finish < 0.6}
+      expanded={props.expanded}
+      onHeaderClick={props.onHeaderClick}
+    >
+      <p className="spec-label mt-2">Metallic leaf</p>
+      <SpecSelect
+        aria-label="Metallic leaf"
         value={spec.finish.metallicLeaf}
-        onChange={(e) =>
+        options={metallicLeafValues.map((value) => ({
+          value,
+          label: value,
+        }))}
+        onChange={(value) =>
           props.onChange(
             setConfidence(
               {
                 ...spec,
                 finish: {
                   ...spec.finish,
-                  metallicLeaf: e.target.value as typeof spec.finish.metallicLeaf,
+                  metallicLeaf: value as typeof spec.finish.metallicLeaf,
                 },
               },
               "finish",
             ),
           )
         }
-      >
-        {metallicLeafValues.map((value) => (
-          <option key={value} value={value}>
-            Metallic leaf: {value}
-          </option>
-        ))}
-      </select>
+      />
     </SpecEntry>
   );
 }

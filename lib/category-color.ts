@@ -1,11 +1,11 @@
 import type { CategoryKey } from "@/lib/taxonomy";
 
 export const categoryColor: Record<CategoryKey, string> = {
-  structure: "var(--gel-structure)",
-  frosting: "var(--gel-frosting)",
-  piping: "var(--gel-piping)",
-  decor: "var(--gel-decor)",
-  finish: "var(--gel-finish)",
+  structure: "var(--gel-teal)",
+  frosting: "var(--gel-marigold)",
+  piping: "var(--gel-coral)",
+  decor: "var(--gel-lilac)",
+  finish: "var(--gel-plum)",
 };
 
 export const categoryLabel: Record<CategoryKey, string> = {

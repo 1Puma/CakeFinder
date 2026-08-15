@@ -45,10 +45,10 @@ function schemaHint(): string {
   return `{
   "medium": "layered" | "ice_cream",
   "sourceImageUrl": string,
-  "structure": { "tierCount": number, "tiers": Tier[], "estimatedServings": number|null, "supportRequired": boolean },
+  "structure": { "tierCount": number, "tiers": [{ "index": number, "shape": string, "approximateDiameterInches": number|null, "approximateHeightInches": number|null, "visualDescription": string, "locator": string }], "estimatedServings": number|null, "supportRequired": boolean },
   "frosting": { "primary": FrostingType, "secondary": FrostingType|null, "colors": ColorRef[] },
-  "piping": { "borders": Border[], "surfaceElements": SurfaceElement[] },
-  "decor": { "ediblePrint": EdiblePrint|null, "licensedCharacters": LicensedCharacter[], "nonEdibleToppers": string[], "sculptural": SculpturalElement[], "freshFlorals": boolean },
+  "piping": { "borders": [{ "type": string, "derivedTip": string, "placement": string, "repeatCount": number|null, "colorRef": string, "visualDescription": string, "locator": string }], "surfaceElements": [{ "kind": string, "inferredNozzleFamily": string|null, "ridgeCharacter": string|null, "count": number|null, "colorRef": string, "visualDescription": string, "locator": string }] },
+  "decor": { "ediblePrint": { "approximateSizeInches": number|null, "shape": string, "subject": string, "visualDescription": string, "locator": string }|null, "licensedCharacters": LicensedCharacter[], "nonEdibleToppers": string[], "sculptural": SculpturalElement[], "freshFlorals": boolean },
   "finish": { "metallicLeaf": "gold"|"silver"|"none", pearls, sprinkles, edibleGlitter, isomalt, waferPaper, airbrush, drip, marbling, texturedPaletteKnife },
   "confidence": { structure, frosting, piping, decor, finish },
   "flags": [],

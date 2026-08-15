@@ -12,7 +12,14 @@ export function DecoratorCard(props: {
 }) {
   const photos = props.match.decorator.portfolioImages.slice(0, 3);
   return (
-    <article className={`border border-ink bg-icing p-3 ${props.selected ? "bg-butter" : ""}`}>
+    <article
+      className="border border-ink bg-icing p-3"
+      style={
+        props.selected
+          ? { outline: "2px solid var(--ink-violet)", outlineOffset: "2px" }
+          : undefined
+      }
+    >
       <div className="mb-3 grid grid-cols-3 gap-1">
         {photos.map((photo) => (
           <CakePhoto

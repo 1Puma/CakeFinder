@@ -64,7 +64,7 @@ export function OutreachForm(props: {
         Name
         <input
           required
-          className="mt-1 min-h-11 w-full border border-ink bg-icing px-3"
+          className="spec-select mt-1 min-h-11 w-full px-3"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -74,7 +74,7 @@ export function OutreachForm(props: {
         <input
           required
           type="email"
-          className="mt-1 min-h-11 w-full border border-ink bg-icing px-3"
+          className="spec-select mt-1 min-h-11 w-full px-3"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -82,7 +82,7 @@ export function OutreachForm(props: {
       <label className="block">
         Event date
         <input
-          className="mt-1 min-h-11 w-full border border-ink bg-icing px-3"
+          className="spec-select mt-1 min-h-11 w-full px-3"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
@@ -90,12 +90,12 @@ export function OutreachForm(props: {
       <label className="block">
         Notes
         <textarea
-          className="mt-1 min-h-24 w-full border border-ink bg-icing px-3 py-2"
+          className="spec-select mt-1 min-h-24 w-full px-3 py-2"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
         />
       </label>
-      <pre className="overflow-auto whitespace-pre-wrap border border-ink bg-butter p-3 text-[13px]">
+      <pre className="overflow-auto whitespace-pre-wrap border border-ink bg-icing p-3 text-[13px]">
         {draft}
       </pre>
       <button type="submit" className="btn">

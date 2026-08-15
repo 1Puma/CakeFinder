@@ -35,10 +35,10 @@ export function MatchWorkspace(props: { specId: string }) {
           persistSpec(record.spec);
           setSpec(record.spec);
         } else {
-          setError(record.error ?? "Spec not found.");
+          setError(record.error ?? "Spec not found. Start from a photo on the home page.");
         }
       })
-      .catch(() => setError("Spec not found."));
+      .catch(() => setError("Spec not found. Start from a photo on the home page."));
   }, [props.specId]);
 
   useEffect(() => {
@@ -94,6 +94,9 @@ export function MatchWorkspace(props: { specId: string }) {
     return (
       <main className="p-6">
         <p>{error}</p>
+        <Link className="btn mt-4 inline-flex" href="/">
+          Upload a photo
+        </Link>
       </main>
     );
   }
@@ -117,8 +120,8 @@ export function MatchWorkspace(props: { specId: string }) {
           </Link>
         }
       />
-      <AgentTrace steps={steps} />
-      <div className="space-y-4 p-4 md:p-6">
+      <AgentTrace steps={steps} complete={result !== null || error !== null} />
+      <div className="space-y-4 p-4 pb-20 md:p-6 md:pb-6">
         {substitution ? (
           <SubstitutionPrompt
             substitution={substitution}
@@ -139,7 +142,7 @@ export function MatchWorkspace(props: { specId: string }) {
             gold leaf / licensed print and search again.
           </p>
         ) : null}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 desk:grid-cols-3">
           {result?.matches.map((match) => (
             <DecoratorCard
               key={match.decorator.id}

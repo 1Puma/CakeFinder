@@ -14,9 +14,11 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { MediumToggle } from "@/components/MediumToggle";
 import { lookupBorderTip } from "@/lib/taxonomy";
 import { applyMediumConstraints } from "@/lib/medium-constraints";
+import { useMinWidth } from "@/lib/use-min-width";
 
 export function SpecWorkspace(props: { specId: string }) {
   const router = useRouter();
+  const tablet = useMinWidth(768);
   const [spec, setSpec] = useState<CakeSpec | null>(null);
   const [pending, setPending] = useState<{ spec: CakeSpec; changes: ChangeDescription[] } | null>(
     null,
@@ -70,6 +72,9 @@ export function SpecWorkspace(props: { specId: string }) {
     return (
       <main className="p-6">
         <p>{error}</p>
+        <Link className="btn mt-4 inline-flex" href="/">
+          Upload a photo
+        </Link>
       </main>
     );
   }
@@ -82,7 +87,7 @@ export function SpecWorkspace(props: { specId: string }) {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-[88px] md:pb-0">
       <SiteHeader
         trailing={
           <>
@@ -96,11 +101,11 @@ export function SpecWorkspace(props: { specId: string }) {
           </>
         }
       />
-      <div className="grid lg:grid-cols-[60%_40%]">
-        <div className="p-4 md:p-6">
-          <ExplodedView spec={spec} activeId={active} onSelect={setActive} />
+      <div className="grid min-w-0 md:grid-cols-[55%_45%] desk:grid-cols-[60%_40%]">
+        <div className="min-w-0 p-4 md:p-6">
+          <ExplodedView spec={spec} activeId={active} />
         </div>
-        <div className="border-t border-ink lg:border-l lg:border-t-0">
+        <div className="min-w-0 border-t border-ink md:border-l md:border-t-0">
           <div className="p-4">
             <p className="data mb-3 text-[13px]">Spec</p>
             {spec.flags.map((flag) => (
@@ -108,7 +113,13 @@ export function SpecWorkspace(props: { specId: string }) {
                 {flag.message}
               </p>
             ))}
-            <SpecEditor spec={spec} onChange={commit} accordion />
+            <SpecEditor
+              spec={spec}
+              onChange={commit}
+              accordion={!tablet}
+              activeId={active}
+              onSelect={setActive}
+            />
             {pending ? (
               <div className="mt-3">
                 <ChangeDiff
@@ -136,7 +147,7 @@ export function SpecWorkspace(props: { specId: string }) {
                 error?: string;
               };
               if (!response.ok || !record.spec || !record.changes) {
-                setError(record.error ?? "Could not apply that edit.");
+                setError(record.error ?? "Could not apply that edit. Try naming a field.");
                 return;
               }
               if (record.changes.length === 0) {
@@ -151,9 +162,9 @@ export function SpecWorkspace(props: { specId: string }) {
       </div>
       <div className="flex flex-wrap items-center gap-3 border-t border-ink px-4 py-3">
         <label className="flex min-h-11 items-center gap-2">
-          City
+          <span className="spec-label">City</span>
           <input
-            className="min-h-11 border border-ink bg-icing px-3"
+            className="spec-select min-h-11 px-3"
             value={city}
             onChange={(e) => setCity(e.target.value)}
           />

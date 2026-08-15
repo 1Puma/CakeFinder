@@ -17,6 +17,16 @@ so a different decorator could reproduce it.
 
 CRITICAL RULES:
 
+A TIER is a separate stacked cake with its own diameter, sitting on top of
+another cake. Decorative bands, borders, rows of piping, ruffle arches, and
+rings of rosettes are NOT tiers.
+
+Count a tier only where you can see a diameter change or a visible seam
+between two stacked cakes.
+
+Most cakes are one tier. If you are not certain a second cake is stacked on
+the first, report tierCount: 1.
+
 1. Classify border SHAPE, never piping tip number.
    Three different borders (straight, wavy, bead) all come from a #10 round tip.
    Tip numbers are derived from shape by lookup — that is not your job.
@@ -37,7 +47,10 @@ CRITICAL RULES:
    franchise if you are unsure — report detectedName: null with the
    franchise you suspect.
 
-6. Include region bounding boxes {x,y,w,h} in 0–1 image space on each tier, border, surface element, and edible print.
+6. Every tier, border, surface element, and edible print must include
+   visualDescription (one sentence, decorator vocabulary) and locator
+   (where it sits, in plain words). Describe position in words a person
+   would use, never as coordinates or pixel positions.
 
 Medium for this photo: ${args.medium}
 

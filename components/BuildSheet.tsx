@@ -15,7 +15,7 @@ export function BuildSheet(props: { spec: CakeSpec; bakeryName: string }) {
       <CakePhoto
         src={props.spec.sourceImageUrl}
         alt="Reference cake"
-        className="mb-6 max-h-80 w-full rounded-[var(--radius-image)] object-contain"
+        className="mb-6 max-h-80 w-full rounded-[var(--radius-image)] bg-icing object-contain"
       />
       <p className="mb-4">{complexityLabel(props.spec)}</p>
       <pre className="whitespace-pre-wrap text-[15px]">{specPlainLanguage(props.spec)}</pre>

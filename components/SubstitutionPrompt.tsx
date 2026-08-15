@@ -9,7 +9,7 @@ export function SubstitutionPrompt(props: {
 }) {
   return (
     <aside
-      className="border border-ink bg-butter px-4 py-3"
+      className="border border-ink bg-icing px-4 py-3"
       style={{ borderLeft: "3px solid var(--amber-flag)" }}
     >
       <p className="data text-[13px] text-flag line-through">{props.substitution.blockedFlag}</p>

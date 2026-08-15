@@ -36,7 +36,7 @@ export function UploadDropzone() {
       <label className="flex min-h-11 items-center gap-2">
         <span className="data text-[13px]">City</span>
         <input
-          className="min-h-11 flex-1 border border-ink bg-icing px-3"
+          className="spec-select min-h-11 flex-1 px-3"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           aria-label="City"

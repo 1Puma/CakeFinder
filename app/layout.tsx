@@ -34,8 +34,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${display.variable} ${body.variable} ${data.variable}`}>{children}</body>
+    <html lang="en" className={`${display.variable} ${body.variable} ${data.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

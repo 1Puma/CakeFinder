@@ -41,13 +41,6 @@ export const categoryKeys = ["structure", "frosting", "piping", "decor", "finish
 
 export type CategoryKey = (typeof categoryKeys)[number];
 
-export const regionSchema = z.object({
-  x: z.number().min(0).max(1),
-  y: z.number().min(0).max(1),
-  w: z.number().min(0).max(1),
-  h: z.number().min(0).max(1),
-});
-
 export const colorRefSchema = z.object({
   hex: z.string().regex(/^#?[0-9A-Fa-f]{6}$/),
   gelFamily: z.string(),
@@ -72,12 +65,17 @@ export const specFlagSchema = z.object({
   details: z.array(z.string()).optional(),
 });
 
+const locatedFields = {
+  visualDescription: z.string().min(1),
+  locator: z.string().min(1),
+};
+
 export const tierSchema = z.object({
   index: z.number().int().min(0),
   shape: shapeSchema,
   approximateDiameterInches: z.number().positive().nullable(),
   approximateHeightInches: z.number().positive().nullable(),
-  region: regionSchema.nullable().optional(),
+  ...locatedFields,
 });
 
 export const borderSchema = z.object({
@@ -86,7 +84,7 @@ export const borderSchema = z.object({
   placement: placementSchema,
   repeatCount: z.number().int().min(0).nullable(),
   colorRef: z.string(),
-  region: regionSchema.nullable().optional(),
+  ...locatedFields,
 });
 
 export const surfaceElementSchema = z.object({
@@ -95,7 +93,7 @@ export const surfaceElementSchema = z.object({
   ridgeCharacter: ridgeSchema.nullable(),
   count: z.number().int().min(0).nullable(),
   colorRef: z.string(),
-  region: regionSchema.nullable().optional(),
+  ...locatedFields,
 });
 
 export const cakeSpecBodySchema = z.object({
@@ -122,7 +120,8 @@ export const cakeSpecBodySchema = z.object({
         approximateSizeInches: z.number().positive().nullable(),
         shape: printShapeSchema,
         subject: z.string(),
-        region: regionSchema.nullable().optional(),
+        visualDescription: z.string().min(1),
+        locator: z.string().min(1),
       })
       .nullable(),
     licensedCharacters: z.array(
@@ -173,7 +172,6 @@ export const cakeSpecSchema = cakeSpecBodySchema.extend({
 
 export type CakeSpec = z.infer<typeof cakeSpecSchema>;
 export type CakeSpecBody = z.infer<typeof cakeSpecBodySchema>;
-export type Region = z.infer<typeof regionSchema>;
 export type SpecFlag = z.infer<typeof specFlagSchema>;
 
 export function buildSpecZodSchema(): z.ZodType<CakeSpec> {
