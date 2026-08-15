@@ -5,14 +5,10 @@ import { useRouter } from "next/navigation";
 import { persistSpec } from "@/lib/spec-cache";
 import { exampleMeta } from "@/lib/fixtures";
 import { SiteHeader } from "@/components/SiteHeader";
-import { MediumToggle } from "@/components/MediumToggle";
 import type { CakeSpec } from "@/lib/taxonomy";
 
 export function IntakeUpload(props: { bakeryId: string; bakeryName: string }) {
   const router = useRouter();
-  const [medium, setMedium] = useState<"layered" | "ice_cream">(
-    props.bakeryId.includes("cream") || props.bakeryId === "frost-circle" ? "ice_cream" : "layered",
-  );
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,10 +34,7 @@ export function IntakeUpload(props: { bakeryId: string; bakeryName: string }) {
         <p className="mt-2 text-slate">
           Upload the cake you want. They receive a build sheet instead of a screenshot.
         </p>
-        <div className="mt-6">
-          <MediumToggle value={medium} onChange={setMedium} />
-        </div>
-        <label className="mt-4 flex cursor-pointer flex-col gap-2 border border-dashed border-hairline p-6">
+        <label className="mt-6 flex cursor-pointer flex-col gap-2 border border-dashed border-hairline p-6">
           Drop a cake photo
           <input
             className="sr-only"
@@ -53,7 +46,6 @@ export function IntakeUpload(props: { bakeryId: string; bakeryName: string }) {
               if (!file) return;
               const form = new FormData();
               form.set("image", file);
-              form.set("medium", medium);
               void send(form);
             }}
           />

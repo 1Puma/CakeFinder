@@ -11,19 +11,16 @@ import { SpecEditor } from "@/components/SpecEditor";
 import { NlEditForm } from "@/components/NlEditForm";
 import { ChangeDiff } from "@/components/ChangeDiff";
 import { SiteHeader } from "@/components/SiteHeader";
-import { MediumToggle } from "@/components/MediumToggle";
 import { lookupBorderTip } from "@/lib/taxonomy";
-import { applyMediumConstraints } from "@/lib/medium-constraints";
-import { useMinWidth } from "@/lib/use-min-width";
 
 export function SpecWorkspace(props: { specId: string }) {
   const router = useRouter();
-  const tablet = useMinWidth(768);
   const [spec, setSpec] = useState<CakeSpec | null>(null);
   const [pending, setPending] = useState<{ spec: CakeSpec; changes: ChangeDescription[] } | null>(
     null,
   );
   const [error, setError] = useState<string | null>(null);
+  const [editError, setEditError] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [city, setCity] = useState("Austin, TX");
   const [active, setActive] = useState<string | null>(null);
@@ -83,19 +80,15 @@ export function SpecWorkspace(props: { specId: string }) {
     );
   }
 
+  const notices = spec.flags.filter((flag) => flag.code === "medium_constraint");
+
   return (
     <div className="min-h-screen pb-[88px] md:pb-0">
       <SiteHeader
         trailing={
-          <>
-            <MediumToggle
-              value={spec.medium}
-              onChange={(medium) => commit(applyMediumConstraints({ ...spec, medium }))}
-            />
-            <Link className="btn btn-quiet" href="/">
-              New
-            </Link>
-          </>
+          <Link className="btn btn-quiet" href="/">
+            New
+          </Link>
         }
       />
       <div className="grid min-w-0 md:grid-cols-[55%_45%] desk:grid-cols-[60%_40%]">
@@ -104,8 +97,8 @@ export function SpecWorkspace(props: { specId: string }) {
         </div>
         <div className="min-w-0 border-t border-hairline md:border-l md:border-t-0">
           <div className="card m-4 p-7 md:m-6">
-            <p className="data mb-3 text-[13px]">Spec</p>
-            {spec.flags.map((flag) => (
+            <p className="data mb-3 text-[13px]">What we read</p>
+            {notices.map((flag) => (
               <p key={flag.code + flag.message} className="mb-3 text-[13px] text-flag">
                 {flag.message}
               </p>
@@ -113,7 +106,7 @@ export function SpecWorkspace(props: { specId: string }) {
             <SpecEditor
               spec={spec}
               onChange={commit}
-              accordion={!tablet}
+              accordion={false}
               activeId={active}
               onSelect={setActive}
             />
@@ -129,9 +122,11 @@ export function SpecWorkspace(props: { specId: string }) {
                 />
               </div>
             ) : null}
+            {editError ? <p className="mt-3 text-[13px] text-flag">{editError}</p> : null}
           </div>
           <NlEditForm
             onSubmit={async (instruction) => {
+              setEditError(null);
               const response = await fetch("/api/spec-edit", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -144,14 +139,13 @@ export function SpecWorkspace(props: { specId: string }) {
                 error?: string;
               };
               if (!response.ok || !record.spec || !record.changes) {
-                setError(record.error ?? "Could not apply that edit. Try naming a field.");
+                setEditError(record.error ?? "Could not apply that edit. Try naming a field.");
                 return;
               }
               if (record.changes.length === 0) {
-                setError("Nothing in the spec matched that instruction. Try naming a field.");
+                setEditError("Nothing in the spec matched that instruction. Try naming a field.");
                 return;
               }
-              setError(null);
               setPending({ spec: record.spec, changes: record.changes });
             }}
           />

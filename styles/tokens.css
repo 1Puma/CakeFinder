@@ -149,10 +149,36 @@ textarea {
   line-height: 1.6;
 }
 
-.spec-select {
+.spec-select,
+.spec-note {
   border-radius: var(--r-control);
   border: 1px solid var(--hairline);
   background: var(--card);
+}
+
+.spec-note {
+  width: 100%;
+  min-height: 72px;
+  padding: var(--space-3);
+  resize: vertical;
+}
+
+details > summary {
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::after {
+  content: "+";
+  margin-left: auto;
+  font-family: var(--font-data);
+}
+
+details[open] > summary::after {
+  content: "–";
 }
 
 .trace-line {

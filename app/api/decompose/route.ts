@@ -14,8 +14,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ spec });
   }
 
-  const mediumRaw = form.get("medium");
-  const medium = mediumRaw === "ice_cream" ? "ice_cream" : "layered";
   const file = form.get("image");
   if (!(file instanceof File)) {
     return NextResponse.json(
@@ -24,9 +22,10 @@ export async function POST(request: Request) {
     );
   }
   const buffer = Buffer.from(await file.arrayBuffer());
-  const result = await decompose({ imageBuffer: buffer, medium });
+  const result = await decompose({ imageBuffer: buffer });
   if (!result.ok) {
-    return NextResponse.json({ error: result.error.message }, { status: 400 });
+    const status = result.error.kind === "missing_key" ? 503 : 400;
+    return NextResponse.json({ error: result.error.message }, { status });
   }
   return NextResponse.json({ spec: result.value });
 }

@@ -3,8 +3,11 @@ import { expect, test } from "@playwright/test";
 test("demo flow: example spec, edit, match", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("link", { name: "CakeMatch" })).toBeVisible();
+  await expect(page.getByText("Drop a cake photo")).toBeInViewport();
   await page.getByRole("button", { name: /Three-tier fondant/ }).click();
   await page.waitForURL(/\/spec\//, { timeout: 30_000 });
+  await expect(page.getByRole("checkbox", { name: /Shell border/ })).toBeChecked();
+  await expect(page.getByRole("checkbox", { name: /Gold leaf/ })).toBeChecked();
   await expect(page.getByPlaceholder("describe a change")).toBeVisible();
   await page.getByPlaceholder("describe a change").fill("make it two tiers and drop the gold leaf");
   await page.locator("form").getByRole("button", { name: "Apply" }).click();

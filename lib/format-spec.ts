@@ -34,7 +34,12 @@ export function specPlainLanguage(spec: CakeSpec): string {
     `Accents: ${accents || "none listed"}.`,
     `Finishes: ${finishes || "none listed"}.`,
     `Toppings: ${kinds || "none listed"}. ${items ? `Items: ${items}.` : ""}`,
-  ].join("\n");
+    spec.other.length > 0
+      ? `Also on this cake: ${spec.other.map((item) => item.description).join("; ")}.`
+      : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 export function complexityLabel(spec: CakeSpec): string {

@@ -29,8 +29,17 @@ export const structureShapes = structureJson.shapes;
 export const mediumConstraints = mediumConstraintsJson;
 
 export const categoryKeys = ["coating", "borders", "accents", "finishes", "toppings"] as const;
+export const analysisCategoryKeys = [
+  "coating",
+  "borders",
+  "accents",
+  "finishes",
+  "toppings",
+  "other",
+] as const;
 
 export type CategoryKey = (typeof categoryKeys)[number];
+export type AnalysisCategoryKey = (typeof analysisCategoryKeys)[number];
 
 const coatingIdSchema = enumFrom(coatingChoices.map((c) => c.id));
 const borderIdSchema = enumFrom(borderChoices.map((c) => c.id));
@@ -65,6 +74,20 @@ export const toppingItemSchema = z.object({
   count: z.number().int().min(0).nullable(),
   arrangement: z.string().min(1),
   ...locatedFields,
+});
+
+export const otherItemSchema = z.object({
+  description: z.string().min(1),
+  locator: z.string().min(1),
+});
+
+export const summariesSchema = z.object({
+  coating: z.string(),
+  borders: z.string(),
+  accents: z.string(),
+  finishes: z.string(),
+  toppings: z.string(),
+  other: z.string(),
 });
 
 export const cakeSpecVisionSchema = z.object({
@@ -111,6 +134,7 @@ export const cakeSpecVisionSchema = z.object({
     ),
     items: z.array(toppingItemSchema),
   }),
+  other: z.array(otherItemSchema).default([]),
   confidence: z.object({
     structure: z.number().min(0).max(1),
     coating: z.number().min(0).max(1),
@@ -127,6 +151,7 @@ export const cakeSpecBodySchema = cakeSpecVisionSchema.extend({
   frosting: z.object({
     primary: frostingIdSchema.nullable(),
   }),
+  summaries: summariesSchema,
 });
 
 export const cakeSpecSchema = cakeSpecBodySchema.extend({
@@ -173,6 +198,9 @@ export function buildTaxonomyPromptSection(): string {
     "Toppings & embellishments:",
     line(toppingChoices),
     "When toppings include named confections, fill toppings.items with item, brandNamed, count, arrangement.",
+    "",
+    "If a decoration is visible but has no taxonomy id, put it in other[] with description and locator.",
+    "Do not invent taxonomy ids.",
     "",
     "Do not detect frosting type. Leave frosting out of the vision output.",
   ].join("\n");

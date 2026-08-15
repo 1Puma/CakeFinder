@@ -24,7 +24,9 @@ export function PhotoPanel(props: { spec: CakeSpec; activeId: string | null }) {
             <p className="mt-1 text-[15px] text-ink">{active.visualDescription}</p>
           </>
         ) : (
-          <p className="text-[15px] text-ink-soft">Select a component to see where it sits.</p>
+          <p className="text-[15px] text-ink-soft">
+            {props.spec.coating?.visualDescription ?? "Open a category to see where it sits."}
+          </p>
         )}
       </div>
     </div>

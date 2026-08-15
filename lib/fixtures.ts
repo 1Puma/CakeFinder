@@ -1,4 +1,5 @@
-import type { CakeSpec } from "./taxonomy";
+import { summariesFromVision } from "./summaries";
+import { cakeSpecSchema, type CakeSpec } from "./taxonomy";
 
 const createdAt = new Date("2026-08-15T12:00:00.000Z");
 
@@ -11,8 +12,16 @@ const baseConfidence = {
   toppings: 0.76,
 };
 
+function complete(spec: Omit<CakeSpec, "summaries" | "other">): CakeSpec {
+  const withOther = { ...spec, other: [] };
+  return cakeSpecSchema.parse({
+    ...withOther,
+    summaries: summariesFromVision(withOther),
+  });
+}
+
 export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", CakeSpec> = {
-  tieredFondant: {
+  tieredFondant: complete({
     id: "example-tiered",
     medium: "layered",
     sourceImageUrl: "/examples/tiered.svg",
@@ -95,8 +104,8 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
     },
     confidence: baseConfidence,
     flags: [],
-  },
-  licensed: {
+  }),
+  licensed: complete({
     id: "example-licensed",
     medium: "layered",
     sourceImageUrl: "/examples/licensed.svg",
@@ -171,8 +180,8 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
         details: ["borders"],
       },
     ],
-  },
-  iceCream: {
+  }),
+  iceCream: complete({
     id: "example-ice-cream",
     medium: "ice_cream",
     sourceImageUrl: "/examples/ice-cream.svg",
@@ -249,7 +258,7 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
       toppings: 0.75,
     },
     flags: [],
-  },
+  }),
 };
 
 export const exampleMeta = [

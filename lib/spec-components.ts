@@ -57,6 +57,14 @@ export function specComponents(spec: CakeSpec): SpecComponent[] {
       visualDescription: item.visualDescription,
     });
   });
+  spec.other.forEach((item, index) => {
+    items.push({
+      id: `other-${index}`,
+      category: "toppings",
+      locator: item.locator,
+      visualDescription: item.description,
+    });
+  });
   return items;
 }
 

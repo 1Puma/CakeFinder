@@ -1,11 +1,6 @@
 import { buildTaxonomyPromptSection } from "../lib/taxonomy";
 
-export function decomposePrompt(args: {
-  medium: "layered" | "ice_cream";
-  mediumConstraints: string;
-  schema: string;
-  retryError?: string;
-}): string {
+export function decomposePrompt(args: { schema: string; retryError?: string }): string {
   const retry = args.retryError
     ? `\nThe previous JSON failed validation:\n${args.retryError}\nReturn corrected JSON only.\n`
     : "";
@@ -43,16 +38,19 @@ on a larger one.
    and describe the arrangement in words. "There is a cookie on it" is not
    a spec.
 
-6. Every coating, border, accent, finish, topping kind, topping item, and
-   tier must include visualDescription and locator. Describe position in
-   words a person would use, never as coordinates or pixel positions.
+6. Every coating, border, accent, finish, topping kind, topping item, other
+   item, and tier must include visualDescription (or description for other)
+   and locator. Describe position in words a person would use, never as
+   coordinates or pixel positions.
 
-Medium for this photo: ${args.medium}
+7. Classify medium as layered or ice_cream from the photo. Default layered
+   if unsure. Ice cream cakes look frozen, often as a sheet, with a whipped
+   coat.
+
+8. If something is on the cake but has no taxonomy id, put it in other[].
+   Do not invent ids.
 
 ${buildTaxonomyPromptSection()}
-
-MEDIUM CONSTRAINTS
-${args.mediumConstraints}
 
 Return JSON matching this schema exactly. Do not wrap in markdown.
 Do not include a frosting field.

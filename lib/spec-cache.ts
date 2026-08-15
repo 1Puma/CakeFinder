@@ -1,7 +1,16 @@
 import type { CakeSpec } from "@/lib/taxonomy";
 import { cakeSpecSchema } from "@/lib/taxonomy";
+import { mergeSummaries } from "@/lib/summaries";
 
-const prefix = "cakematch:spec:";
+const prefix = "cakematch:spec:v2:";
+
+function revive(spec: CakeSpec): CakeSpec {
+  return {
+    ...spec,
+    other: spec.other ?? [],
+    summaries: mergeSummaries(spec),
+  };
+}
 
 export function persistSpec(spec: CakeSpec): void {
   if (typeof window === "undefined") return;
@@ -14,7 +23,7 @@ export function readPersistedSpec(id: string): CakeSpec | null {
   const raw = sessionStorage.getItem(prefix + id);
   if (!raw) return null;
   try {
-    return cakeSpecSchema.parse(JSON.parse(raw));
+    return revive(cakeSpecSchema.parse(JSON.parse(raw)));
   } catch {
     return null;
   }

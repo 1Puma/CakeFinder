@@ -4,20 +4,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { persistMatchCity, persistSpec } from "@/lib/spec-cache";
 import { exampleMeta } from "@/lib/fixtures";
-import { MediumToggle } from "@/components/MediumToggle";
 import type { CakeSpec } from "@/lib/taxonomy";
 
 export function UploadDropzone() {
   const router = useRouter();
-  const [medium, setMedium] = useState<"layered" | "ice_cream">("layered");
-  const [city, setCity] = useState("Austin, TX");
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function send(form: FormData) {
     setError(null);
     setBusy("Reading the cake…");
-    persistMatchCity(city, 15);
+    persistMatchCity("Austin, TX", 15);
     const response = await fetch("/api/decompose", { method: "POST", body: form });
     const json: unknown = await response.json();
     const record = json as { spec?: CakeSpec; error?: string };
@@ -32,16 +29,6 @@ export function UploadDropzone() {
 
   return (
     <div className="flex flex-col gap-4 text-left">
-      <MediumToggle value={medium} onChange={setMedium} />
-      <label className="flex min-h-11 items-center gap-2">
-        <span className="data text-[13px]">City</span>
-        <input
-          className="spec-select min-h-11 flex-1 px-3"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          aria-label="City"
-        />
-      </label>
       <label className="flex cursor-pointer flex-col items-start gap-2 border border-dashed border-hairline bg-card p-6">
         <span className="font-medium">Drop a cake photo</span>
         <span className="text-slate">
@@ -57,7 +44,6 @@ export function UploadDropzone() {
             if (!file) return;
             const form = new FormData();
             form.set("image", file);
-            form.set("medium", medium);
             void send(form);
           }}
         />

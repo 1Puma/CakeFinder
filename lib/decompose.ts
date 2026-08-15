@@ -8,11 +8,12 @@ import { resizeForVision } from "./image";
 import { err, ok, type Result } from "./result";
 import { lookupBorderTip, cakeSpecVisionSchema, cakeSpecSchema, type CakeSpec } from "./taxonomy";
 import { saveSpec } from "./store/index";
-import mediumConstraintsJson from "../data/taxonomy/medium-constraints.json";
 import { decomposePrompt } from "../prompts/decompose";
+import { normalizeVisionPayload } from "./normalize-vision";
+import { summariesFromVision } from "./summaries";
 
 export type DecomposeError = {
-  kind: "empty_image" | "persist";
+  kind: "empty_image" | "missing_key" | "parse";
   message: string;
 };
 
@@ -27,19 +28,6 @@ function hydrateDerivedTips(spec: CakeSpec): CakeSpec {
   };
 }
 
-function sampleSpec(medium: "layered" | "ice_cream", sourceImageUrl: string): CakeSpec {
-  const base = medium === "ice_cream" ? fixtureSpecs.iceCream : fixtureSpecs.tieredFondant;
-  return {
-    ...structuredClone(base),
-    id: randomUUID(),
-    medium,
-    sourceImageUrl,
-    createdAt: new Date(),
-    editedByUser: false,
-    frosting: { primary: null },
-  };
-}
-
 function schemaHint(): string {
   return `{
   "medium": "layered" | "ice_cream",
@@ -50,21 +38,38 @@ function schemaHint(): string {
   "accents": [{ "type": string, "count": number|null, "visualDescription": string, "locator": string }],
   "finishes": [{ "type": string, "visualDescription": string, "locator": string }],
   "toppings": { "kinds": [{ "type": string, "visualDescription": string, "locator": string }], "items": [{ "item": string, "brandNamed": boolean, "count": number|null, "arrangement": string, "visualDescription": string, "locator": string }] },
+  "other": [{ "description": string, "locator": string }],
   "confidence": { structure, coating, borders, accents, finishes, toppings },
   "flags": [],
   "editedByUser": false
 }`;
 }
 
-function withFrostingUnset(
+function parseVision(value: unknown) {
+  return cakeSpecVisionSchema.parse(normalizeVisionPayload(value));
+}
+
+function toCakeSpec(
   vision: ReturnType<typeof cakeSpecVisionSchema.parse>,
-): Omit<CakeSpec, "id" | "createdAt"> {
-  return { ...vision, frosting: { primary: null } };
+  sourceImageUrl: string,
+): CakeSpec {
+  const withOther = {
+    ...vision,
+    sourceImageUrl,
+    frosting: { primary: null },
+    other: vision.other ?? [],
+  };
+  return cakeSpecSchema.parse({
+    ...withOther,
+    id: randomUUID(),
+    createdAt: new Date(),
+    editedByUser: false,
+    summaries: summariesFromVision(withOther),
+  });
 }
 
 export async function decompose(input: {
   imageBuffer: Buffer;
-  medium: "layered" | "ice_cream";
 }): Promise<Result<CakeSpec, DecomposeError>> {
   if (input.imageBuffer.byteLength === 0) {
     return err({
@@ -73,103 +78,76 @@ export async function decompose(input: {
     });
   }
 
+  if (!hasGrokKey()) {
+    return err({
+      kind: "missing_key",
+      message:
+        "Live photo reading needs GROK_API_KEY on the server. Open an example cake, or add the key and try this photo again.",
+    });
+  }
+
   const resized = await resizeForVision(input.imageBuffer);
   const sourceImageUrl = `data:image/jpeg;base64,${resized.toString("base64")}`;
 
-  let spec: CakeSpec;
+  const prompt = decomposePrompt({
+    schema: schemaHint(),
+  });
+  const parsed = await grokJson(
+    {
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "image_url", image_url: { url: sourceImageUrl } },
+            { type: "text", text: prompt },
+          ],
+        },
+      ],
+    },
+    parseVision,
+  );
 
-  if (!hasGrokKey()) {
-    spec = sampleSpec(input.medium, sourceImageUrl);
-    spec.flags = [
-      ...spec.flags.filter((f) => f.code !== "parse_failure"),
-      {
-        code: "parse_failure",
-        message:
-          "GROK_API_KEY is not set, so this is a sample spec. Add the key on the server to read your photo. You can still edit it and find decorators.",
-      },
-    ];
-  } else {
-    const prompt = decomposePrompt({
-      medium: input.medium,
-      mediumConstraints: JSON.stringify(mediumConstraintsJson, null, 2),
+  let vision = parsed.ok ? parsed.value : null;
+  if (!parsed.ok) {
+    const retryPrompt = decomposePrompt({
       schema: schemaHint(),
+      retryError: parsed.error.kind === "parse" ? parsed.error.raw : parsed.error.kind,
     });
-    const parsed = await grokJson(
+    const retried = await grokJson(
       {
         messages: [
           {
             role: "user",
             content: [
               { type: "image_url", image_url: { url: sourceImageUrl } },
-              { type: "text", text: prompt },
+              { type: "text", text: retryPrompt },
             ],
           },
         ],
       },
-      (value) => cakeSpecVisionSchema.parse(value),
+      parseVision,
     );
-
-    if (!parsed.ok) {
-      const retryPrompt = decomposePrompt({
-        medium: input.medium,
-        mediumConstraints: JSON.stringify(mediumConstraintsJson, null, 2),
-        schema: schemaHint(),
-        retryError: parsed.error.kind === "parse" ? parsed.error.raw : parsed.error.kind,
-      });
-      const retried = await grokJson(
-        {
-          messages: [
-            {
-              role: "user",
-              content: [
-                { type: "image_url", image_url: { url: sourceImageUrl } },
-                { type: "text", text: retryPrompt },
-              ],
-            },
-          ],
-        },
-        (value) => cakeSpecVisionSchema.parse(value),
-      );
-      if (!retried.ok) {
-        spec = sampleSpec(input.medium, sourceImageUrl);
-        spec.confidence = {
-          structure: 0.2,
-          coating: 0.2,
-          borders: 0.2,
-          accents: 0.2,
-          finishes: 0.2,
-          toppings: 0.2,
-        };
-        spec.flags.push({
-          code: "parse_failure",
-          message:
-            "Couldn't parse the model output into a spec. This is a partial spec you can edit. Try a brighter, straight-on shot.",
-        });
-      } else {
-        spec = cakeSpecSchema.parse({
-          ...withFrostingUnset(retried.value),
-          id: randomUUID(),
-          sourceImageUrl,
-          createdAt: new Date(),
-          editedByUser: false,
-        });
-      }
-    } else {
-      spec = cakeSpecSchema.parse({
-        ...withFrostingUnset(parsed.value),
-        id: randomUUID(),
-        sourceImageUrl,
-        createdAt: new Date(),
-        editedByUser: false,
+    if (!retried.ok) {
+      return err({
+        kind: "parse",
+        message:
+          "Couldn't turn this photo into a spec. Try a brighter, straight-on shot of the whole cake.",
       });
     }
+    vision = retried.value;
   }
 
-  spec.medium = input.medium;
-  spec.frosting = { primary: null };
+  if (!vision) {
+    return err({
+      kind: "parse",
+      message:
+        "Couldn't turn this photo into a spec. Try a brighter, straight-on shot of the whole cake.",
+    });
+  }
+
+  let spec = toCakeSpec(vision, sourceImageUrl);
   spec = hydrateDerivedTips(applyMediumConstraints(spec));
   spec.structure.supportRequired = spec.structure.tierCount > 1;
-
   await saveSpec(spec);
   return ok(spec);
 }
@@ -182,6 +160,7 @@ export async function specFromExample(
   cloned.createdAt = new Date();
   cloned.editedByUser = false;
   cloned.frosting = { primary: null };
+  cloned.summaries = summariesFromVision(cloned);
   const spec = applyMediumConstraints(hydrateDerivedTips(cloned));
   await saveSpec(spec);
   return spec;

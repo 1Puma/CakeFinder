@@ -1,15 +1,25 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
-import { HeroScroll } from "@/components/HeroScroll";
+import { HeroVisual } from "@/components/HeroVisual";
 import { UploadDropzone } from "@/components/UploadDropzone";
 
 export default function HomePage() {
   return (
     <div>
       <SiteHeader />
-      <HeroScroll />
-      <section className="mx-auto max-w-[1200px] px-4 py-16 md:px-6">
-        <UploadDropzone />
+      <section className="mx-auto grid w-full max-w-[1200px] items-start gap-10 px-4 py-10 md:px-6 desk:grid-cols-2 desk:items-center">
+        <HeroVisual />
+        <div>
+          <h1 className="max-w-xl font-display text-[34px] leading-tight text-ink desk:text-[52px]">
+            Every custom cake order starts with a screenshot and a guess.
+          </h1>
+          <p className="mt-4 max-w-md text-[18px]">
+            Upload the photo. Get the spec. Find who can build it.
+          </p>
+          <div className="mt-8">
+            <UploadDropzone />
+          </div>
+        </div>
       </section>
       <section className="mx-auto grid max-w-[1200px] gap-6 px-4 py-10 md:px-6 md:grid-cols-3">
         <div className="card p-8">
