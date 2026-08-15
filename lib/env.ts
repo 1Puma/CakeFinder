@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { DEFAULT_RADIUS_MILES as RADIUS_DEFAULT, MAX_RADIUS_MILES as RADIUS_MAX } from "./radius";
 
 const envSchema = z.object({
   GROK_API_KEY: z.string().optional().default(""),
@@ -11,8 +12,16 @@ const envSchema = z.object({
   OUTREACH_TO_OVERRIDE: z.string().optional().default(""),
   DATABASE_URL: z.string().optional().default("file:./dev.db"),
   DEFAULT_CITY: z.string().optional().default("Austin, TX"),
-  DEFAULT_RADIUS_MILES: z.coerce.number().optional().default(15),
-  MAX_RADIUS_MILES: z.coerce.number().optional().default(40),
+  DEFAULT_RADIUS_MILES: z.coerce
+    .number()
+    .optional()
+    .default(RADIUS_DEFAULT)
+    .transform((n) => Math.max(n, RADIUS_DEFAULT)),
+  MAX_RADIUS_MILES: z.coerce
+    .number()
+    .optional()
+    .default(RADIUS_MAX)
+    .transform((n) => Math.max(n, RADIUS_MAX)),
   INDEX_TTL_DAYS: z.coerce.number().optional().default(14),
 });
 

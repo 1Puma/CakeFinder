@@ -6,6 +6,7 @@ import type { CakeSpec } from "@/lib/taxonomy";
 import type { ChangeDescription } from "@/lib/types";
 import Link from "next/link";
 import { persistSpec, readPersistedSpec, persistMatchCity, readMatchCity } from "@/lib/spec-cache";
+import { DEFAULT_RADIUS_MILES } from "@/lib/radius";
 import { PhotoPanel } from "@/components/PhotoPanel";
 import { SpecEditor } from "@/components/SpecEditor";
 import { NlEditForm } from "@/components/NlEditForm";
@@ -167,7 +168,7 @@ export function SpecWorkspace(props: { specId: string }) {
           type="button"
           className="btn ml-auto"
           onClick={() => {
-            persistMatchCity(city, 15);
+            persistMatchCity(city, DEFAULT_RADIUS_MILES);
             persistSpec(spec);
             router.push(`/matches/${spec.id}`);
           }}
