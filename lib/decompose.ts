@@ -3,8 +3,8 @@ import { randomUUID } from "node:crypto";
 import { applyMediumConstraints } from "./medium-constraints";
 import { hasGrokKey } from "./env";
 import { fixtureSpecs } from "./fixtures";
-import { grokJson } from "./grok";
-import { resizeForVision } from "./image";
+import { describeGrokError, grokJson, type GrokError } from "./grok";
+import { ImageConvertError, resizeForVision } from "./image";
 import { err, ok, type Result } from "./result";
 import { lookupBorderTip, cakeSpecVisionSchema, cakeSpecSchema, type CakeSpec } from "./taxonomy";
 import { saveSpec } from "./store/index";
@@ -13,7 +13,7 @@ import { normalizeVisionPayload } from "./normalize-vision";
 import { summariesFromVision } from "./summaries";
 
 export type DecomposeError = {
-  kind: "empty_image" | "missing_key" | "parse";
+  kind: "empty_image" | "missing_key" | "parse" | "image" | "vision";
   message: string;
 };
 
@@ -31,7 +31,6 @@ function hydrateDerivedTips(spec: CakeSpec): CakeSpec {
 function schemaHint(): string {
   return `{
   "medium": "layered" | "ice_cream",
-  "sourceImageUrl": string,
   "structure": { "tierCount": number, "tiers": [{ "index": number, "shape": string, "approximateDiameterInches": number|null, "approximateHeightInches": number|null, "visualDescription": string, "locator": string }], "estimatedServings": number|null, "supportRequired": boolean },
   "coating": { "style": string, "visualDescription": string, "locator": string } | null,
   "borders": [{ "type": string, "derivedTip": string, "visualDescription": string, "locator": string }],
@@ -43,6 +42,19 @@ function schemaHint(): string {
   "flags": [],
   "editedByUser": false
 }`;
+}
+
+function grokLog(error: GrokError): string {
+  if (error.kind === "http") {
+    return `http ${error.status} ${error.body.slice(0, 300)}`;
+  }
+  if (error.kind === "parse") {
+    return `parse ${error.raw.slice(0, 300)}`;
+  }
+  if (error.kind === "network") {
+    return `network ${error.message}`;
+  }
+  return error.kind;
 }
 
 function parseVision(value: unknown) {
@@ -82,11 +94,20 @@ export async function decompose(input: {
     return err({
       kind: "missing_key",
       message:
-        "Live photo reading needs GROK_API_KEY on the server. Open an example cake, or add the key and try this photo again.",
+        "GROK_API_KEY is not set on Vercel. Add it under Project → Settings → Environment Variables for Production.",
     });
   }
 
-  const resized = await resizeForVision(input.imageBuffer);
+  let resized: Buffer;
+  try {
+    resized = await resizeForVision(input.imageBuffer);
+  } catch (error) {
+    const message =
+      error instanceof ImageConvertError
+        ? error.message
+        : "That file is not a photo xAI can read. Use JPEG, PNG, WebP, or GIF.";
+    return err({ kind: "image", message });
+  }
   const sourceImageUrl = `data:image/jpeg;base64,${resized.toString("base64")}`;
 
   const prompt = decomposePrompt({
@@ -98,20 +119,25 @@ export async function decompose(input: {
         {
           role: "user",
           content: [
-            { type: "image_url", image_url: { url: sourceImageUrl } },
+            { type: "image_url", image_url: { url: sourceImageUrl, detail: "high" } },
             { type: "text", text: prompt },
           ],
         },
       ],
+      maxTokens: 4096,
     },
     parseVision,
   );
 
   let vision = parsed.ok ? parsed.value : null;
   if (!parsed.ok) {
+    console.error("decompose grok failed", grokLog(parsed.error));
+    if (parsed.error.kind !== "parse") {
+      return err({ kind: "vision", message: describeGrokError(parsed.error) });
+    }
     const retryPrompt = decomposePrompt({
       schema: schemaHint(),
-      retryError: parsed.error.kind === "parse" ? parsed.error.raw : parsed.error.kind,
+      retryError: parsed.error.raw.slice(0, 1500),
     });
     const retried = await grokJson(
       {
@@ -119,29 +145,28 @@ export async function decompose(input: {
           {
             role: "user",
             content: [
-              { type: "image_url", image_url: { url: sourceImageUrl } },
+              { type: "image_url", image_url: { url: sourceImageUrl, detail: "high" } },
               { type: "text", text: retryPrompt },
             ],
           },
         ],
+        jsonMode: false,
+        maxTokens: 4096,
       },
       parseVision,
     );
     if (!retried.ok) {
-      return err({
-        kind: "parse",
-        message:
-          "Couldn't turn this photo into a spec. Try a brighter, straight-on shot of the whole cake.",
-      });
+      console.error("decompose grok retry failed", grokLog(retried.error));
+      return err({ kind: "vision", message: describeGrokError(retried.error) });
     }
     vision = retried.value;
   }
 
   if (!vision) {
     return err({
-      kind: "parse",
+      kind: "vision",
       message:
-        "Couldn't turn this photo into a spec. Try a brighter, straight-on shot of the whole cake.",
+        "Grok returned a response that was not a spec. The photo reached xAI; the model output could not be read.",
     });
   }
 

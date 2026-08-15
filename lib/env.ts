@@ -29,7 +29,7 @@ export function getEnv(): AppEnv {
     return cached;
   }
   cached = envSchema.parse({
-    GROK_API_KEY: process.env.GROK_API_KEY,
+    GROK_API_KEY: process.env.GROK_API_KEY || process.env.XAI_API_KEY,
     GROK_MODEL: process.env.GROK_MODEL,
     GROK_BASE_URL: process.env.GROK_BASE_URL,
     GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY,

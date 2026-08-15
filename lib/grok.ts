@@ -1,8 +1,9 @@
 import { getEnv } from "@/lib/env";
-import { err, ok, type Result } from "@/lib/result";
+import { err, ok, type Result } from "./result";
 
 export type GrokMessageContent =
-  { type: "text"; text: string } | { type: "image_url"; image_url: { url: string } };
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string; detail?: "low" | "high" } };
 
 export type GrokMessage = {
   role: "system" | "user" | "assistant";
@@ -19,16 +20,49 @@ type GrokOptions = {
   messages: GrokMessage[];
   temperature?: number;
   jsonMode?: boolean;
+  maxTokens?: number;
   fetchImpl?: typeof fetch;
   retries?: number;
 };
 
 type ChatCompletionResponse = {
-  choices?: Array<{ message?: { content?: string | null } }>;
+  choices?: Array<{
+    message?: {
+      content?: string | null;
+      reasoning_content?: string | null;
+    };
+  }>;
 };
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function snippet(text: string): string {
+  return text.replaceAll(/\s+/g, " ").trim().slice(0, 180);
+}
+
+export function describeGrokError(error: GrokError): string {
+  switch (error.kind) {
+    case "missing_key":
+      return "GROK_API_KEY is not set on Vercel. Add it under Project → Settings → Environment Variables for Production.";
+    case "http":
+      if (error.status === 401 || error.status === 403) {
+        return "xAI rejected GROK_API_KEY. The variable is present on Vercel but the key is invalid or revoked.";
+      }
+      if (error.status === 429) {
+        return "xAI rate-limited the request. Wait a moment and try the photo again.";
+      }
+      return `xAI returned ${error.status}: ${snippet(error.body) || "no body"}`;
+    case "parse":
+      return "Grok returned a response that was not a spec. The photo reached xAI; the model output could not be read.";
+    case "network":
+      return `Could not reach xAI (${error.message}).`;
+    default: {
+      const _never: never = error;
+      return _never;
+    }
+  }
 }
 
 export async function grokComplete(options: GrokOptions): Promise<Result<string, GrokError>> {
@@ -52,6 +86,7 @@ export async function grokComplete(options: GrokOptions): Promise<Result<string,
           model: env.GROK_MODEL,
           messages: options.messages,
           temperature: options.temperature ?? 0.2,
+          max_tokens: options.maxTokens ?? 4096,
           response_format: options.jsonMode === false ? undefined : { type: "json_object" },
         }),
       });
@@ -70,7 +105,8 @@ export async function grokComplete(options: GrokOptions): Promise<Result<string,
       } catch {
         return err({ kind: "parse", raw: body });
       }
-      const content = parsed.choices?.[0]?.message?.content;
+      const message = parsed.choices?.[0]?.message;
+      const content = message?.content || message?.reasoning_content;
       if (!content) {
         return err({ kind: "parse", raw: body });
       }
@@ -90,8 +126,15 @@ export async function grokJson<T>(
   options: GrokOptions,
   parse: (value: unknown) => T,
 ): Promise<Result<T, GrokError>> {
-  const completed = await grokComplete({ ...options, jsonMode: true });
+  const completed = await grokComplete(options);
   if (!completed.ok) {
+    if (
+      completed.error.kind === "http" &&
+      completed.error.status === 400 &&
+      options.jsonMode !== false
+    ) {
+      return grokJson({ ...options, jsonMode: false }, parse);
+    }
     return completed;
   }
   try {

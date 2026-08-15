@@ -54,6 +54,7 @@ ${buildTaxonomyPromptSection()}
 
 Return JSON matching this schema exactly. Do not wrap in markdown.
 Do not include a frosting field.
+Do not include sourceImageUrl — the server adds that.
 ${args.schema}
 ${retry}`;
 }

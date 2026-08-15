@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { decompose, specFromExample } from "@/lib/decompose";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
 
 export async function POST(request: Request) {
   let form: FormData;

@@ -92,7 +92,7 @@ export const summariesSchema = z.object({
 
 export const cakeSpecVisionSchema = z.object({
   medium: z.enum(["layered", "ice_cream"]),
-  sourceImageUrl: z.string(),
+  sourceImageUrl: z.string().optional().default(""),
   structure: z.object({
     tierCount: z.number().int().min(1).max(8),
     tiers: z.array(tierSchema).min(1),

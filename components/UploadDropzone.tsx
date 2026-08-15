@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { persistMatchCity, persistSpec } from "@/lib/spec-cache";
 import { exampleMeta } from "@/lib/fixtures";
+import { photoToJpegFile } from "@/lib/photo-file";
 import type { CakeSpec } from "@/lib/taxonomy";
 
 export function UploadDropzone() {
@@ -15,16 +16,22 @@ export function UploadDropzone() {
     setError(null);
     setBusy("Reading the cake…");
     persistMatchCity("Austin, TX", 15);
-    const response = await fetch("/api/decompose", { method: "POST", body: form });
-    const json: unknown = await response.json();
-    const record = json as { spec?: CakeSpec; error?: string };
-    if (!response.ok || !record.spec) {
+    let json: unknown;
+    try {
+      const response = await fetch("/api/decompose", { method: "POST", body: form });
+      json = await response.json();
+      const record = json as { spec?: CakeSpec; error?: string };
+      if (!response.ok || !record.spec) {
+        setBusy(null);
+        setError(record.error ?? "Couldn't read the cake.");
+        return;
+      }
+      persistSpec(record.spec);
+      router.push(`/spec/${record.spec.id}`);
+    } catch {
       setBusy(null);
-      setError(record.error ?? "Couldn't read the cake. Try a brighter, straight-on shot.");
-      return;
+      setError("The upload did not return a spec. Check Vercel logs for /api/decompose.");
     }
-    persistSpec(record.spec);
-    router.push(`/spec/${record.spec.id}`);
   }
 
   return (
@@ -37,14 +44,20 @@ export function UploadDropzone() {
         <input
           className="sr-only"
           type="file"
-          accept="image/*"
-          capture="environment"
+          accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,image/*"
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (!file) return;
-            const form = new FormData();
-            form.set("image", file);
-            void send(form);
+            void (async () => {
+              try {
+                const jpeg = await photoToJpegFile(file);
+                const form = new FormData();
+                form.set("image", jpeg);
+                await send(form);
+              } catch {
+                setError("Couldn't read that photo. Try JPEG or PNG.");
+              }
+            })();
           }}
         />
       </label>
