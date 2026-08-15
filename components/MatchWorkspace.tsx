@@ -117,7 +117,7 @@ export function MatchWorkspace(props: { specId: string }) {
           </Link>
         }
       />
-      <AgentTrace steps={steps} complete={result !== null} compact />
+      <AgentTrace steps={steps} />
       <div className="space-y-4 p-4 md:p-6">
         {substitution ? (
           <SubstitutionPrompt

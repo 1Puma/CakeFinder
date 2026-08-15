@@ -1,17 +1,11 @@
 "use client";
 
 import type { TraceStep } from "@/lib/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export function AgentTrace(props: { steps: TraceStep[]; complete: boolean; compact?: boolean }) {
-  const [open, setOpen] = useState(!props.compact);
+export function AgentTrace(props: { steps: TraceStep[] }) {
+  const [open, setOpen] = useState(true);
   const latest = props.steps[props.steps.length - 1];
-
-  useEffect(() => {
-    if (!props.complete && props.compact) {
-      setOpen(false);
-    }
-  }, [props.complete, props.compact]);
 
   return (
     <section className="border-t border-ink bg-ink text-icing">
