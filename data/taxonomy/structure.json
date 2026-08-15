@@ -1,10 +1,8 @@
 {
   "shapes": [
-    { "id": "round", "label": "Round", "rarity": 0.05 },
-    { "id": "square", "label": "Square", "rarity": 0.25 },
-    { "id": "hexagon", "label": "Hexagon", "rarity": 0.55 },
-    { "id": "sheet", "label": "Sheet", "rarity": 0.15 },
-    { "id": "sculpted", "label": "Sculpted", "rarity": 0.75 },
-    { "id": "character_mold", "label": "Character mold", "rarity": 0.45 }
+    { "id": "round", "label": "Round" },
+    { "id": "square", "label": "Square" },
+    { "id": "sheet", "label": "Sheet" },
+    { "id": "heart", "label": "Heart" }
   ]
 }

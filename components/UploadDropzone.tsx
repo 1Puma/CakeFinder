@@ -4,45 +4,39 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { persistMatchCity, persistSpec } from "@/lib/spec-cache";
 import { exampleMeta } from "@/lib/fixtures";
-import { MediumToggle } from "@/components/MediumToggle";
+import { photoToJpegFile } from "@/lib/photo-file";
 import type { CakeSpec } from "@/lib/taxonomy";
 
 export function UploadDropzone() {
   const router = useRouter();
-  const [medium, setMedium] = useState<"layered" | "ice_cream">("layered");
-  const [city, setCity] = useState("Austin, TX");
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function send(form: FormData) {
     setError(null);
     setBusy("Reading the cake…");
-    persistMatchCity(city, 15);
-    const response = await fetch("/api/decompose", { method: "POST", body: form });
-    const json: unknown = await response.json();
-    const record = json as { spec?: CakeSpec; error?: string };
-    if (!response.ok || !record.spec) {
+    persistMatchCity("Austin, TX", 15);
+    let json: unknown;
+    try {
+      const response = await fetch("/api/decompose", { method: "POST", body: form });
+      json = await response.json();
+      const record = json as { spec?: CakeSpec; error?: string };
+      if (!response.ok || !record.spec) {
+        setBusy(null);
+        setError(record.error ?? "Couldn't read the cake.");
+        return;
+      }
+      persistSpec(record.spec);
+      router.push(`/spec/${record.spec.id}`);
+    } catch {
       setBusy(null);
-      setError(record.error ?? "Couldn't read the cake. Try a brighter, straight-on shot.");
-      return;
+      setError("The upload did not return a spec. Check Vercel logs for /api/decompose.");
     }
-    persistSpec(record.spec);
-    router.push(`/spec/${record.spec.id}`);
   }
 
   return (
     <div className="flex flex-col gap-4 text-left">
-      <MediumToggle value={medium} onChange={setMedium} />
-      <label className="flex min-h-11 items-center gap-2">
-        <span className="data text-[13px]">City</span>
-        <input
-          className="min-h-11 flex-1 border border-ink bg-icing px-3"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          aria-label="City"
-        />
-      </label>
-      <label className="flex cursor-pointer flex-col items-start gap-2 border border-dashed border-ink bg-icing p-6">
+      <label className="flex cursor-pointer flex-col items-start gap-2 border border-dashed border-hairline bg-card p-6">
         <span className="font-medium">Drop a cake photo</span>
         <span className="text-slate">
           Pinterest screenshots work fine. Camera capture is available on phones.
@@ -50,15 +44,20 @@ export function UploadDropzone() {
         <input
           className="sr-only"
           type="file"
-          accept="image/*"
-          capture="environment"
+          accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,image/*"
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (!file) return;
-            const form = new FormData();
-            form.set("image", file);
-            form.set("medium", medium);
-            void send(form);
+            void (async () => {
+              try {
+                const jpeg = await photoToJpegFile(file);
+                const form = new FormData();
+                form.set("image", jpeg);
+                await send(form);
+              } catch {
+                setError("Couldn't read that photo. Try JPEG or PNG.");
+              }
+            })();
           }}
         />
       </label>

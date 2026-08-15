@@ -14,7 +14,7 @@ export function renderOutreachHtml(args: {
   const notes = args.notes ? `<p>${escapeHtml(args.notes)}</p>` : "";
   const specHtml = escapeHtml(args.specPlain).replaceAll("\n", "<br/>");
   return `<!doctype html>
-<html><body style="font-family:Georgia,serif;color:#1f2d3d;line-height:1.5">
+<html><body style="font-family:'Inter Tight',system-ui,sans-serif;color:#3d1e5c;line-height:1.5">
 <p>Hi ${escapeHtml(args.decoratorName)},</p>
 <p>I'm looking for someone to make this cake and your work looks like a match.</p>
 <p><strong>WHAT I'M ASKING FOR</strong><br/>${specHtml}</p>
@@ -22,7 +22,7 @@ export function renderOutreachHtml(args: {
 ${notes}
 <p>Can you take this on, and what would it cost?</p>
 <p>${escapeHtml(args.customerName)}<br/>${escapeHtml(args.customerEmail)}</p>
-<p style="color:#5c5346;font-size:12px">This inquiry was sent through CakeMatch, which matched your portfolio to this design. Claim your profile to manage what shows.</p>
+<p style="color:#6b6478;font-size:12px">This inquiry was sent through CakeMatch, which matched your portfolio to this design. Claim your profile to manage what shows.</p>
 </body></html>`;
 }
 

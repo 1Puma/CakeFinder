@@ -16,7 +16,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "east-side-buttercream", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "east-side-buttercream",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "es-1",
@@ -48,16 +54,10 @@
         "reasoning": "Three stacked round tiers in recent work."
       },
       {
-        "flag": "frosting:fondant",
+        "flag": "coating:smooth",
         "confidence": 0.9,
         "evidenceImageIds": ["es-1"],
         "reasoning": "Smooth fondant panels on every visible tier."
-      },
-      {
-        "flag": "frosting:buttercream_american",
-        "confidence": 0.7,
-        "evidenceImageIds": ["es-3"],
-        "reasoning": "Piped buttercream shells at the base."
       },
       {
         "flag": "border:shell",
@@ -66,16 +66,28 @@
         "reasoning": "Ridged fan shells with tapering tails."
       },
       {
-        "flag": "finish:metallicLeaf",
+        "flag": "topping:gold_leaf",
         "confidence": 0.84,
         "evidenceImageIds": ["es-2"],
         "reasoning": "Gold leaf shards on the top tier."
       },
       {
-        "flag": "finish:pearls",
+        "flag": "topping:sprinkles",
         "confidence": 0.6,
         "evidenceImageIds": ["es-1"],
         "reasoning": "Sugar pearls along a seam."
+      },
+      {
+        "flag": "border:bead",
+        "confidence": 0.85,
+        "evidenceImageIds": ["es-3"],
+        "reasoning": "Bead border along a tier seam."
+      },
+      {
+        "flag": "accent:rosettes",
+        "confidence": 0.85,
+        "evidenceImageIds": ["es-3"],
+        "reasoning": "Piped rosettes on the top tier."
       }
     ]
   },
@@ -96,7 +108,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "south-congress-sweets", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "south-congress-sweets",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "sc-1",
@@ -122,7 +140,7 @@
     ],
     "capabilities": [
       {
-        "flag": "frosting:buttercream_american",
+        "flag": "coating:smooth",
         "confidence": 0.95,
         "evidenceImageIds": ["sc-2"],
         "reasoning": "American buttercream finish on cupcakes and cakes."
@@ -140,16 +158,10 @@
         "reasoning": "Bead border on a single-tier cake."
       },
       {
-        "flag": "surface:rosette",
+        "flag": "accent:rosettes",
         "confidence": 0.85,
         "evidenceImageIds": ["sc-3"],
         "reasoning": "Rosette clusters on top."
-      },
-      {
-        "flag": "nozzle:open_star",
-        "confidence": 0.8,
-        "evidenceImageIds": ["sc-3"],
-        "reasoning": "Open-star ridges on the rosettes."
       }
     ]
   },
@@ -170,7 +182,13 @@
     "isChain": true,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "frost-circle", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "frost-circle",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "fc-1",
@@ -202,28 +220,16 @@
         "reasoning": "Rolled ice cream cakes in the case."
       },
       {
-        "flag": "decor:edible_print",
+        "flag": "topping:fondant_cutouts",
         "confidence": 0.9,
         "evidenceImageIds": ["fc-1"],
         "reasoning": "Edible image sheets on sheet cakes."
       },
       {
-        "flag": "decor:licensed_print",
-        "confidence": 0.9,
-        "evidenceImageIds": ["fc-1"],
-        "reasoning": "Licensed character prints through a store program."
-      },
-      {
-        "flag": "frosting:pastry_pride",
+        "flag": "coating:smooth",
         "confidence": 0.85,
         "evidenceImageIds": ["fc-2"],
         "reasoning": "Whipped topping finish."
-      },
-      {
-        "flag": "frosting:buttercream_american",
-        "confidence": 0.6,
-        "evidenceImageIds": ["fc-3"],
-        "reasoning": "Piped buttercream borders on ice cream cakes."
       }
     ]
   },
@@ -244,7 +250,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "hill-country-tiers", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "hill-country-tiers",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "hc-1",
@@ -276,25 +288,19 @@
         "reasoning": "Four-tier stacked cakes in the portfolio."
       },
       {
-        "flag": "structure:sculpted",
-        "confidence": 0.8,
-        "evidenceImageIds": ["hc-3"],
-        "reasoning": "Carved sculptural cake."
-      },
-      {
-        "flag": "frosting:fondant",
+        "flag": "coating:smooth",
         "confidence": 0.9,
         "evidenceImageIds": ["hc-1"],
         "reasoning": "Fondant covering on formal tiers."
       },
       {
-        "flag": "finish:metallicLeaf",
+        "flag": "topping:gold_leaf",
         "confidence": 0.88,
         "evidenceImageIds": ["hc-2"],
         "reasoning": "Heavy gold leaf on a wedding tier."
       },
       {
-        "flag": "decor:sculptural",
+        "flag": "topping:sugarwork",
         "confidence": 0.82,
         "evidenceImageIds": ["hc-3"],
         "reasoning": "Gum-paste sculpture work."
@@ -324,7 +330,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "mueller-market-cakes", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "mueller-market-cakes",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "mm-1",
@@ -350,13 +362,13 @@
     ],
     "capabilities": [
       {
-        "flag": "decor:edible_print",
+        "flag": "topping:fondant_cutouts",
         "confidence": 0.86,
         "evidenceImageIds": ["mm-1"],
         "reasoning": "Photo cakes with edible images."
       },
       {
-        "flag": "frosting:buttercream_american",
+        "flag": "coating:smooth",
         "confidence": 0.9,
         "evidenceImageIds": ["mm-2"],
         "reasoning": "Buttercream finish throughout."
@@ -392,7 +404,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "barton-buttercream", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "barton-buttercream",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "bb-1",
@@ -424,43 +442,25 @@
         "reasoning": "Textbook open-star shells."
       },
       {
-        "flag": "border:reverse_shell",
-        "confidence": 0.7,
-        "evidenceImageIds": ["bb-1"],
-        "reasoning": "Alternating reverse shells on one cake."
-      },
-      {
         "flag": "border:bead",
         "confidence": 0.8,
         "evidenceImageIds": ["bb-2"],
         "reasoning": "Bead work at tier seams."
       },
       {
-        "flag": "surface:rosette",
+        "flag": "accent:rosettes",
         "confidence": 0.9,
         "evidenceImageIds": ["bb-2"],
         "reasoning": "Rosette coverage on a top tier."
       },
       {
-        "flag": "surface:basketweave_panel",
+        "flag": "coating:comb",
         "confidence": 0.85,
         "evidenceImageIds": ["bb-3"],
         "reasoning": "Basketweave side panels."
       },
       {
-        "flag": "nozzle:basketweave",
-        "confidence": 0.85,
-        "evidenceImageIds": ["bb-3"],
-        "reasoning": "Tip 47 basketweave demonstrated."
-      },
-      {
-        "flag": "nozzle:open_star",
-        "confidence": 0.9,
-        "evidenceImageIds": ["bb-1"],
-        "reasoning": "Open star used for shells and stars."
-      },
-      {
-        "flag": "frosting:buttercream_swiss",
+        "flag": "coating:smooth",
         "confidence": 0.7,
         "evidenceImageIds": ["bb-2"],
         "reasoning": "Silky Swiss-style finish."
@@ -484,7 +484,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "downtown-sheet-cakes", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "downtown-sheet-cakes",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "ds-1",
@@ -503,19 +509,19 @@
     ],
     "capabilities": [
       {
-        "flag": "frosting:buttercream_american",
+        "flag": "coating:smooth",
         "confidence": 0.9,
         "evidenceImageIds": ["ds-1"],
         "reasoning": "Sheet cakes iced in American buttercream."
       },
       {
-        "flag": "decor:edible_print",
+        "flag": "topping:fondant_cutouts",
         "confidence": 0.7,
         "evidenceImageIds": ["ds-2"],
         "reasoning": "One edible photo sheet cake."
       },
       {
-        "flag": "border:straight",
+        "flag": "border:scallop",
         "confidence": 0.6,
         "evidenceImageIds": ["ds-1"],
         "reasoning": "Straight tube border."
@@ -539,7 +545,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "westlake-fondant-atelier", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "westlake-fondant-atelier",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "wl-1",
@@ -571,13 +583,13 @@
         "reasoning": "Tall stacked fondant cakes."
       },
       {
-        "flag": "frosting:fondant",
+        "flag": "coating:smooth",
         "confidence": 0.95,
         "evidenceImageIds": ["wl-1"],
         "reasoning": "Fondant is the house finish."
       },
       {
-        "flag": "finish:metallicLeaf",
+        "flag": "topping:gold_leaf",
         "confidence": 0.9,
         "evidenceImageIds": ["wl-2"],
         "reasoning": "Gold and silver leaf both shown."
@@ -589,16 +601,10 @@
         "reasoning": "104 ruffle skirt."
       },
       {
-        "flag": "nozzle:petal",
+        "flag": "accent:piped_flowers",
         "confidence": 0.8,
         "evidenceImageIds": ["wl-3"],
         "reasoning": "Petal tip used for ruffles and florals."
-      },
-      {
-        "flag": "surface:sugar_floral",
-        "confidence": 0.75,
-        "evidenceImageIds": ["wl-3"],
-        "reasoning": "Sugar flowers on the top tier."
       }
     ]
   },
@@ -619,7 +625,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "round-rock-slice", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "round-rock-slice",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "rr-1",
@@ -651,7 +663,7 @@
         "reasoning": "Two-tier cakes in the window."
       },
       {
-        "flag": "frosting:fondant",
+        "flag": "coating:smooth",
         "confidence": 0.7,
         "evidenceImageIds": ["rr-1"],
         "reasoning": "Fondant on wedding cakes."
@@ -663,13 +675,13 @@
         "reasoning": "Shell borders."
       },
       {
-        "flag": "decor:edible_print",
+        "flag": "topping:fondant_cutouts",
         "confidence": 0.7,
         "evidenceImageIds": ["rr-3"],
         "reasoning": "Edible prints on kids cakes."
       },
       {
-        "flag": "finish:metallicLeaf",
+        "flag": "topping:gold_leaf",
         "confidence": 0.55,
         "evidenceImageIds": ["rr-1"],
         "reasoning": "A little gold paint, not leaf — weak evidence."
@@ -693,7 +705,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "pflugerville-print-cakes", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "pflugerville-print-cakes",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "pf-1",
@@ -719,19 +737,13 @@
     ],
     "capabilities": [
       {
-        "flag": "decor:licensed_print",
-        "confidence": 0.88,
-        "evidenceImageIds": ["pf-1"],
-        "reasoning": "Licensed edible image catalog posted."
-      },
-      {
-        "flag": "decor:edible_print",
+        "flag": "topping:fondant_cutouts",
         "confidence": 0.9,
         "evidenceImageIds": ["pf-1"],
         "reasoning": "Many edible image cakes."
       },
       {
-        "flag": "frosting:buttercream_american",
+        "flag": "coating:smooth",
         "confidence": 0.85,
         "evidenceImageIds": ["pf-2"],
         "reasoning": "Buttercream under the prints."
@@ -767,7 +779,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "cedar-park-creamery", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "cedar-park-creamery",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "cp-1",
@@ -792,22 +810,16 @@
         "reasoning": "Ice cream cakes are the core product."
       },
       {
-        "flag": "frosting:pastry_pride",
+        "flag": "coating:smooth",
         "confidence": 0.9,
         "evidenceImageIds": ["cp-1"],
         "reasoning": "Whipped topping."
       },
       {
-        "flag": "decor:edible_print",
+        "flag": "topping:fondant_cutouts",
         "confidence": 0.8,
         "evidenceImageIds": ["cp-2"],
         "reasoning": "Prints on frozen cakes."
-      },
-      {
-        "flag": "decor:licensed_print",
-        "confidence": 0.8,
-        "evidenceImageIds": ["cp-2"],
-        "reasoning": "Licensed prints in the freezer case."
       }
     ]
   },
@@ -828,7 +840,13 @@
     "isChain": false,
     "claimedByUser": false,
     "lastIndexedAt": "2026-08-01T00:00:00.000Z",
-    "sources": [{ "sourceId": "seed", "externalId": "buda-gold-leaf", "url": null }],
+    "sources": [
+      {
+        "sourceId": "seed",
+        "externalId": "buda-gold-leaf",
+        "url": null
+      }
+    ],
     "portfolioImages": [
       {
         "id": "bg-1",
@@ -854,7 +872,7 @@
     ],
     "capabilities": [
       {
-        "flag": "finish:metallicLeaf",
+        "flag": "topping:gold_leaf",
         "confidence": 0.95,
         "evidenceImageIds": ["bg-1"],
         "reasoning": "Gold leaf is the signature finish."
@@ -866,7 +884,7 @@
         "reasoning": "Tiered wedding cakes."
       },
       {
-        "flag": "frosting:fondant",
+        "flag": "coating:smooth",
         "confidence": 0.85,
         "evidenceImageIds": ["bg-2"],
         "reasoning": "Fondant under the leaf."
@@ -878,7 +896,7 @@
         "reasoning": "Shells at the base."
       },
       {
-        "flag": "decor:edible_print",
+        "flag": "topping:fondant_cutouts",
         "confidence": 0.4,
         "evidenceImageIds": ["bg-2"],
         "reasoning": "Weak — one printed topper, not a program."

@@ -4,8 +4,8 @@ export function portfolioEvalPrompt(args: { requiredFlags: string[] }): string {
   return `Identify only capabilities you can SEE DEMONSTRATED in these photographs.
 
 A bakery listing "custom cakes" in its description is not evidence.
-A photograph of a three-tier fondant cake is evidence for
-structure:tiered and frosting:fondant.
+A photograph of a three-tier cake with a shell border is evidence for
+structure:tiered and border:shell. Do not guess frosting type from a photo.
 
 For each capability you identify, cite which image number demonstrates it
 and give a one-sentence justification.

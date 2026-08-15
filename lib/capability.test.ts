@@ -6,12 +6,12 @@ import { applyMediumConstraints } from "./medium-constraints";
 import { fixtureSpecs } from "./fixtures";
 
 describe("capability", () => {
-  it("extracts rare flags from the licensed character fixture", () => {
-    const spec = cakeSpecSchema.parse(fixtureSpecs.licensed);
+  it("extracts rare flags from the gold-leaf fixture", () => {
+    const spec = cakeSpecSchema.parse(fixtureSpecs.tieredFondant);
     const flags = specToRequiredFlags(spec);
-    assert.ok(flags.includes("decor:licensed_print"));
+    assert.ok(flags.includes("topping:gold_leaf"));
     assert.ok(flags.includes("structure:tiered"));
-    assert.ok(rarityScore("decor:licensed_print") > rarityScore("frosting:buttercream_american"));
+    assert.ok(rarityScore("topping:gold_leaf") > rarityScore("coating:smooth"));
   });
 });
 
@@ -20,7 +20,10 @@ describe("medium constraints", () => {
     const layered = cakeSpecSchema.parse(fixtureSpecs.tieredFondant);
     const ice = applyMediumConstraints({ ...layered, medium: "ice_cream" });
     assert.equal(ice.structure.tierCount, 1);
-    assert.equal(ice.finish.metallicLeaf, "none");
+    assert.equal(
+      ice.toppings.kinds.some((k) => k.type === "gold_leaf"),
+      false,
+    );
     assert.ok(ice.flags.some((f) => f.code === "medium_constraint"));
   });
 });

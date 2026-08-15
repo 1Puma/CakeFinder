@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "id": "dollops",
+      "label": "Dollops / puffs",
+      "description": "Large fluffy mounds of frosting along the top rim or centre",
+      "rarity": 0.25
+    },
+    {
+      "id": "rosettes",
+      "label": "Rosettes",
+      "description": "Swirled rose-like stars piped individually or covering a surface",
+      "rarity": 0.3
+    },
+    {
+      "id": "piped_flowers",
+      "label": "Piped flowers",
+      "description": "Buttercream or royal icing blossoms — roses, tulips, drop flowers, hydrangeas",
+      "rarity": 0.5
+    },
+    {
+      "id": "grass",
+      "label": "Grass / fur effect",
+      "description": "Fine multi-opening strands simulating fur, grass, or nests",
+      "rarity": 0.45
+    }
+  ]
+}

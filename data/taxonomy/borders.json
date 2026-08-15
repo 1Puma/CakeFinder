@@ -1,89 +1,39 @@
 {
-  "types": [
+  "choices": [
     {
-      "id": "straight",
-      "tip": "#10",
-      "family": "round",
-      "visualSignature": "Smooth continuous tube, uniform diameter",
-      "rarity": 0.15
-    },
-    {
-      "id": "wavy",
-      "tip": "#10",
-      "family": "round",
-      "visualSignature": "Same tube, sinusoidal path",
-      "rarity": 0.2
-    },
-    {
-      "id": "bead",
-      "tip": "#10",
-      "family": "round",
-      "visualSignature": "Repeating swelling spheres with pinch points",
-      "rarity": 0.25
+      "id": "scallop",
+      "label": "Scallop / garland / festoon",
+      "description": "Arching, swooping, or curved lines along the top rim or side walls",
+      "rarity": 0.35,
+      "derivedTip": "#32"
     },
     {
       "id": "shell",
-      "tip": "#32",
-      "family": "open_star",
-      "visualSignature": "Ridged fan, tapering tail, forward-facing",
-      "rarity": 0.2
+      "label": "Shell border",
+      "description": "Overlapping shell-shaped piped forms encircling the top or base",
+      "rarity": 0.2,
+      "derivedTip": "#32"
     },
     {
-      "id": "reverse_shell",
-      "tip": "#22",
-      "family": "open_star",
-      "visualSignature": "Ridged spiral, alternating curl direction",
-      "rarity": 0.45
+      "id": "bead",
+      "label": "Bead / pearl border",
+      "description": "Continuous row of small round piped spheres along an edge",
+      "rarity": 0.25,
+      "derivedTip": "#10"
     },
     {
       "id": "ruffle",
-      "tip": "#104",
-      "family": "petal",
-      "visualSignature": "Dense overlapping folds, thin-to-thick section",
-      "rarity": 0.4
+      "label": "Ruffling & swags",
+      "description": "Pleated, draped, or curtain-like ribbon lines on the sides",
+      "rarity": 0.4,
+      "derivedTip": "#104"
     },
     {
-      "id": "band",
-      "tip": "#48",
-      "family": "basketweave",
-      "visualSignature": "Flat wide strip, longitudinal striations",
-      "rarity": 0.5
-    },
-    {
-      "id": "rope",
-      "tip": "#21",
-      "family": "open_star",
-      "visualSignature": "Twisted overlapping S-strokes forming a continuous cord",
-      "rarity": 0.4
-    },
-    {
-      "id": "zigzag",
-      "tip": "#16",
-      "family": "open_star",
-      "visualSignature": "Continuous angular zigzag with even amplitude",
-      "rarity": 0.35
-    },
-    {
-      "id": "dot",
-      "tip": "#3",
-      "family": "round",
-      "visualSignature": "Separated round dots of even size along the edge",
-      "rarity": 0.2
-    },
-    {
-      "id": "scroll",
-      "tip": "#3",
-      "family": "round",
-      "visualSignature": "C-scrolls or S-scrolls linked along the seam",
-      "rarity": 0.55
-    },
-    {
-      "id": "drop_string",
-      "tip": "#2",
-      "family": "round",
-      "visualSignature": "Swagged strings draping between attachment points",
-      "rarity": 0.7
+      "id": "cornelli",
+      "label": "Cornelli lace & scrollwork",
+      "description": "Intricate filigree or continuous squiggled lace lines",
+      "rarity": 0.65,
+      "derivedTip": "#2"
     }
-  ],
-  "placements": ["top_edge", "base", "tier_seam", "vertical", "other"]
+  ]
 }

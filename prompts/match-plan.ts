@@ -4,8 +4,8 @@ export function matchPlanPrompt(args: {
 }): string {
   return `You plan a decorator search. Rank which capability flags actually discriminate.
 
-Universal flags like frosting:buttercream_american do not narrow a city.
-Rare flags like finish:metallicLeaf and decor:licensed_print should drive the search.
+Universal flags like coating:smooth do not narrow a city.
+Rare flags like topping:gold_leaf and finish:mirror_glaze should drive the search.
 
 Required flags:
 ${args.requiredFlags.join("\n")}

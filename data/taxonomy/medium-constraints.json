@@ -1,11 +1,10 @@
 {
   "ice_cream": {
-    "structureRestrictedTo": ["round", "sheet", "character_mold"],
     "maxTiers": 1,
+    "structureRestrictedTo": ["round", "sheet"],
     "frostingAllowed": ["pastry_pride", "whipped_stabilized", "buttercream_american"],
-    "excludedFinish": ["metallicLeaf", "isomalt", "waferPaper"],
-    "excludedDecor": ["freshFlorals"],
-    "sculpturalAllowed": false,
+    "excludedFinishes": ["mirror_glaze", "velvet_spray"],
+    "excludedToppings": ["gold_leaf", "sugarwork", "wafer_paper"],
     "rationale": "Frozen storage and serving temperature rule out these techniques."
   }
 }

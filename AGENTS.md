@@ -78,7 +78,7 @@ Not optional, and cheap if done as you go:
 - Every interactive target ≥44×44px on touch.
 - Visible focus rings. Never `outline: none` without a designed replacement.
 - Never color alone to convey meaning. Capability dots carry `title` attributes and the group carries an `aria-label`.
-- `prefers-reduced-motion` respected on the exploded view and the trace animation.
+- `prefers-reduced-motion` respected on the hero scroll and the trace animation.
 - Real semantic elements. A `<div onClick>` is a bug; use `<button>`.
 - All images have alt text. Decorative images get `alt=""`.
 - Legible at 200% zoom.

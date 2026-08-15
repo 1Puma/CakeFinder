@@ -14,11 +14,11 @@ export function scoreDecorator(
   const matchedFlags = required.filter((flag) => decoratorHasFlag(decorator, flag));
   const missingFlags = required.filter((flag) => !matchedFlags.includes(flag));
   const categories = {
-    structure: 0,
-    frosting: 0,
-    piping: 0,
-    decor: 0,
-    finish: 0,
+    coating: 0,
+    borders: 0,
+    accents: 0,
+    finishes: 0,
+    toppings: 0,
   } as Match["categoryScores"];
   const totals = { ...categories };
   for (const flag of required) {

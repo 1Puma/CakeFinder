@@ -5,10 +5,10 @@ export function MediumToggle(props: {
   onChange: (value: "layered" | "ice_cream") => void;
 }) {
   return (
-    <div className="inline-flex border border-ink" role="group" aria-label="Cake medium">
+    <div className="inline-flex border border-hairline" role="group" aria-label="Cake medium">
       <button
         type="button"
-        className={`min-h-11 px-3 ${props.value === "layered" ? "bg-sunflower" : "bg-icing"}`}
+        className={`min-h-11 px-3 ${props.value === "layered" ? "bg-ink text-card" : "bg-card text-ink"}`}
         aria-pressed={props.value === "layered"}
         onClick={() => props.onChange("layered")}
       >
@@ -16,7 +16,7 @@ export function MediumToggle(props: {
       </button>
       <button
         type="button"
-        className={`min-h-11 px-3 border-l border-ink ${props.value === "ice_cream" ? "bg-sunflower" : "bg-icing"}`}
+        className={`min-h-11 border-l border-hairline px-3 ${props.value === "ice_cream" ? "bg-ink text-card" : "bg-card text-ink"}`}
         aria-pressed={props.value === "ice_cream"}
         onClick={() => props.onChange("ice_cream")}
       >

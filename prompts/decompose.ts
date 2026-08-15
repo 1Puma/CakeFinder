@@ -1,52 +1,60 @@
 import { buildTaxonomyPromptSection } from "../lib/taxonomy";
 
-export function decomposePrompt(args: {
-  medium: "layered" | "ice_cream";
-  mediumConstraints: string;
-  schema: string;
-  retryError?: string;
-}): string {
+export function decomposePrompt(args: { schema: string; retryError?: string }): string {
   const retry = args.retryError
     ? `\nThe previous JSON failed validation:\n${args.retryError}\nReturn corrected JSON only.\n`
     : "";
 
   return `You are a cake decorating specialist producing a build specification from a photograph.
 
-Your job is to identify what techniques and materials were used to make this cake,
+Your job is to identify the decorative choices used to make this cake,
 so a different decorator could reproduce it.
 
 CRITICAL RULES:
 
-1. Classify border SHAPE, never piping tip number.
-   Three different borders (straight, wavy, bead) all come from a #10 round tip.
-   Tip numbers are derived from shape by lookup — that is not your job.
-   Report the morphology you can see.
+A TIER exists only where a SMALLER cake shape sits on top of a LARGER cake
+shape. Look for a step change in diameter with a visible ledge.
 
-2. For rosettes and swirls, report ridge character (fine / medium / bold),
-   not a specific tip. Open star, closed star, and French star all produce
-   rosettes and are not reliably distinguishable in a photograph.
+Decorative bands, borders, drips, rows of piping, and rings of rosettes are
+NOT tiers. A tall single cake is one tier no matter how many bands of
+decoration it carries.
+
+Default to 1. Only report 2 or more when you can see a smaller shape resting
+on a larger one.
+
+1. Do not detect or guess frosting type. Buttercream, Pastry Pride, and
+   whipped coatings look the same in a photograph. Omit frosting from the JSON.
+
+2. Classify borders by the decorative choice (shell, bead, ruffle, scallop,
+   cornelli). Tip numbers are derived from that name — not your job.
 
 3. Report only what is visible. Do not infer interior structure, flavor,
-   or filling. If a tier's height is obscured, return null.
+   or filling.
 
-4. Give a confidence score per category. Be honest — a low score on a
-   genuinely ambiguous category is more useful than a confident guess.
+4. Give a confidence score per detected category. Be honest.
 
-5. If you recognize a copyrighted or trademarked character, report it in
-   licensedCharacters. Do not omit it. Do not attempt to identify the
-   franchise if you are unsure — report detectedName: null with the
-   franchise you suspect.
+5. Named confections on the cake (Oreo, macaron, Kit Kat, berries, shards)
+   go in toppings.items: name the item, whether it is brand-named, count it,
+   and describe the arrangement in words. "There is a cookie on it" is not
+   a spec.
 
-6. Include region bounding boxes {x,y,w,h} in 0–1 image space on each tier, border, surface element, and edible print.
+6. Every coating, border, accent, finish, topping kind, topping item, other
+   item, and tier must include visualDescription (or description for other)
+   and locator. Describe position in words a person would use, never as
+   coordinates or pixel positions.
 
-Medium for this photo: ${args.medium}
+7. Classify medium as layered or ice_cream from the photo. Default layered
+   if unsure. Ice cream cakes look frozen, often as a sheet, with a whipped
+   coat.
+
+8. If something is on the cake but has no taxonomy id, put it in other[].
+   Do not invent ids.
 
 ${buildTaxonomyPromptSection()}
 
-MEDIUM CONSTRAINTS
-${args.mediumConstraints}
-
 Return JSON matching this schema exactly. Do not wrap in markdown.
+Do not include a frosting field.
+Do not include sourceImageUrl — the server adds that.
 ${args.schema}
 ${retry}`;
 }

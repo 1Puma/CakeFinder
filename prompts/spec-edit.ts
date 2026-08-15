@@ -6,7 +6,7 @@ Rules:
 - Patch the smallest set of paths. Do not echo the whole spec.
 - If you change tierCount, also add/remove /structure/tiers entries and set /structure/supportRequired.
 - Derived tip numbers: if a border type changes, set derivedTip to the taxonomy tip for that type. Do not invent tips.
-- Do not add ombre. Do not invent fillings or flavors.
+- Do not invent fillings or flavors.
 - Paths are JSON Pointer from the spec root.
 
 Current spec:

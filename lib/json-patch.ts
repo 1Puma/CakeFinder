@@ -8,7 +8,7 @@ export function applySpecPatch(spec: CakeSpec, patch: Operation[]): Result<CakeS
   try {
     const document = JSON.parse(JSON.stringify(spec)) as CakeSpec;
     const patched = applyPatch(document, patch, true, true).newDocument as CakeSpec;
-    patched.piping.borders = patched.piping.borders.map((border) => ({
+    patched.borders = patched.borders.map((border) => ({
       ...border,
       derivedTip: lookupBorderTip(border.type),
     }));

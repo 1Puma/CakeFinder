@@ -30,36 +30,41 @@ export function applyNaturalLanguageFallback(
         "structure.tierCount",
         spec.structure.tierCount,
         2,
-        `Reduced from ${spec.structure.tierCount} tiers to 2`,
+        `${spec.structure.tierCount} tiers → 2 tiers`,
       ),
     );
   }
 
-  if (
-    /\b(drop|remove|no)\b.*\bgold\b|\bgold leaf\b/.test(text) &&
-    spec.finish.metallicLeaf !== "none"
-  ) {
-    patch.push({ op: "replace", path: "/finish/metallicLeaf", value: "none" });
-    changes.push(
-      change("finish.metallicLeaf", spec.finish.metallicLeaf, "none", "Dropped gold leaf"),
-    );
+  if (/\b(drop|remove|no)\b.*\bgold\b|\bgold leaf\b/.test(text)) {
+    const gold = spec.toppings.kinds.filter((k) => k.type === "gold_leaf");
+    if (gold.length > 0) {
+      patch.push({
+        op: "replace",
+        path: "/toppings/kinds",
+        value: spec.toppings.kinds.filter((k) => k.type !== "gold_leaf"),
+      });
+      changes.push(change("toppings.kinds", "gold leaf", "none", "gold leaf → none"));
+    }
   }
 
-  const borderMatch = /\b(shell|bead|ruffle|wavy|straight|band|rope|zigzag|scroll)\s+border\b/.exec(
-    text,
-  );
-  const firstBorder = spec.piping.borders[0];
+  const borderMatch = /\b(shell|bead|ruffle|scallop|cornelli)\s+border\b/.exec(text);
+  const firstBorder = spec.borders[0];
   if (borderMatch && firstBorder) {
     const type = borderMatch[1];
     if (type) {
-      patch.push({ op: "replace", path: "/piping/borders/0/type", value: type });
+      patch.push({ op: "replace", path: "/borders/0/type", value: type });
       patch.push({
         op: "replace",
-        path: "/piping/borders/0/derivedTip",
+        path: "/borders/0/derivedTip",
         value: lookupBorderTip(type),
       });
       changes.push(
-        change("piping.borders.0.type", firstBorder.type, type, `Changed border to ${type}`),
+        change(
+          "borders.0.type",
+          firstBorder.type,
+          type,
+          `${firstBorder.type} border → ${type} border`,
+        ),
       );
     }
   }
@@ -68,7 +73,15 @@ export function applyNaturalLanguageFallback(
     return { spec, changes: [], patch: [] };
   }
 
-  for (const key of ["structure", "frosting", "piping", "decor", "finish"] as const) {
+  const confidenceKeys = [
+    "structure",
+    "coating",
+    "borders",
+    "accents",
+    "finishes",
+    "toppings",
+  ] as const;
+  for (const key of confidenceKeys) {
     if (changes.some((c) => c.path.startsWith(key))) {
       patch.push({ op: "replace", path: `/confidence/${key}`, value: 1 });
     }

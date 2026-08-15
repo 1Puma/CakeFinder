@@ -3,62 +3,85 @@ import { randomUUID } from "node:crypto";
 import { applyMediumConstraints } from "./medium-constraints";
 import { hasGrokKey } from "./env";
 import { fixtureSpecs } from "./fixtures";
-import { grokJson } from "./grok";
-import { resizeForVision } from "./image";
+import { describeGrokError, grokJson, type GrokError } from "./grok";
+import { ImageConvertError, resizeForVision } from "./image";
 import { err, ok, type Result } from "./result";
-import { lookupBorderTip, cakeSpecBodySchema, cakeSpecSchema, type CakeSpec } from "./taxonomy";
+import { lookupBorderTip, cakeSpecVisionSchema, cakeSpecSchema, type CakeSpec } from "./taxonomy";
 import { saveSpec } from "./store/index";
-import mediumConstraintsJson from "../data/taxonomy/medium-constraints.json";
 import { decomposePrompt } from "../prompts/decompose";
+import { normalizeVisionPayload } from "./normalize-vision";
+import { summariesFromVision } from "./summaries";
 
 export type DecomposeError = {
-  kind: "empty_image" | "persist";
+  kind: "empty_image" | "missing_key" | "parse" | "image" | "vision";
   message: string;
 };
 
 function hydrateDerivedTips(spec: CakeSpec): CakeSpec {
   return {
     ...spec,
-    piping: {
-      ...spec.piping,
-      borders: spec.piping.borders.map((border) => ({
-        ...border,
-        derivedTip: lookupBorderTip(border.type),
-      })),
-    },
-  };
-}
-
-function sampleSpec(medium: "layered" | "ice_cream", sourceImageUrl: string): CakeSpec {
-  const base = medium === "ice_cream" ? fixtureSpecs.iceCream : fixtureSpecs.tieredFondant;
-  return {
-    ...structuredClone(base),
-    id: randomUUID(),
-    medium,
-    sourceImageUrl,
-    createdAt: new Date(),
-    editedByUser: false,
+    frosting: spec.frosting ?? { primary: null },
+    borders: spec.borders.map((border) => ({
+      ...border,
+      derivedTip: lookupBorderTip(border.type),
+    })),
   };
 }
 
 function schemaHint(): string {
   return `{
   "medium": "layered" | "ice_cream",
-  "sourceImageUrl": string,
-  "structure": { "tierCount": number, "tiers": Tier[], "estimatedServings": number|null, "supportRequired": boolean },
-  "frosting": { "primary": FrostingType, "secondary": FrostingType|null, "colors": ColorRef[] },
-  "piping": { "borders": Border[], "surfaceElements": SurfaceElement[] },
-  "decor": { "ediblePrint": EdiblePrint|null, "licensedCharacters": LicensedCharacter[], "nonEdibleToppers": string[], "sculptural": SculpturalElement[], "freshFlorals": boolean },
-  "finish": { "metallicLeaf": "gold"|"silver"|"none", pearls, sprinkles, edibleGlitter, isomalt, waferPaper, airbrush, drip, marbling, texturedPaletteKnife },
-  "confidence": { structure, frosting, piping, decor, finish },
+  "structure": { "tierCount": number, "tiers": [{ "index": number, "shape": string, "approximateDiameterInches": number|null, "approximateHeightInches": number|null, "visualDescription": string, "locator": string }], "estimatedServings": number|null, "supportRequired": boolean },
+  "coating": { "style": string, "visualDescription": string, "locator": string } | null,
+  "borders": [{ "type": string, "derivedTip": string, "visualDescription": string, "locator": string }],
+  "accents": [{ "type": string, "count": number|null, "visualDescription": string, "locator": string }],
+  "finishes": [{ "type": string, "visualDescription": string, "locator": string }],
+  "toppings": { "kinds": [{ "type": string, "visualDescription": string, "locator": string }], "items": [{ "item": string, "brandNamed": boolean, "count": number|null, "arrangement": string, "visualDescription": string, "locator": string }] },
+  "other": [{ "description": string, "locator": string }],
+  "confidence": { structure, coating, borders, accents, finishes, toppings },
   "flags": [],
   "editedByUser": false
 }`;
 }
 
+function grokLog(error: GrokError): string {
+  if (error.kind === "http") {
+    return `http ${error.status} ${error.body.slice(0, 300)}`;
+  }
+  if (error.kind === "parse") {
+    return `parse ${error.raw.slice(0, 300)}`;
+  }
+  if (error.kind === "network") {
+    return `network ${error.message}`;
+  }
+  return error.kind;
+}
+
+function parseVision(value: unknown) {
+  return cakeSpecVisionSchema.parse(normalizeVisionPayload(value));
+}
+
+function toCakeSpec(
+  vision: ReturnType<typeof cakeSpecVisionSchema.parse>,
+  sourceImageUrl: string,
+): CakeSpec {
+  const withOther = {
+    ...vision,
+    sourceImageUrl,
+    frosting: { primary: null },
+    other: vision.other ?? [],
+  };
+  return cakeSpecSchema.parse({
+    ...withOther,
+    id: randomUUID(),
+    createdAt: new Date(),
+    editedByUser: false,
+    summaries: summariesFromVision(withOther),
+  });
+}
+
 export async function decompose(input: {
   imageBuffer: Buffer;
-  medium: "layered" | "ice_cream";
 }): Promise<Result<CakeSpec, DecomposeError>> {
   if (input.imageBuffer.byteLength === 0) {
     return err({
@@ -67,102 +90,89 @@ export async function decompose(input: {
     });
   }
 
-  const resized = await resizeForVision(input.imageBuffer);
+  if (!hasGrokKey()) {
+    return err({
+      kind: "missing_key",
+      message:
+        "GROK_API_KEY is not set on Vercel. Add it under Project → Settings → Environment Variables for Production.",
+    });
+  }
+
+  let resized: Buffer;
+  try {
+    resized = await resizeForVision(input.imageBuffer);
+  } catch (error) {
+    const message =
+      error instanceof ImageConvertError
+        ? error.message
+        : "That file is not a photo xAI can read. Use JPEG, PNG, WebP, or GIF.";
+    return err({ kind: "image", message });
+  }
   const sourceImageUrl = `data:image/jpeg;base64,${resized.toString("base64")}`;
 
-  let spec: CakeSpec;
+  const prompt = decomposePrompt({
+    schema: schemaHint(),
+  });
+  const parsed = await grokJson(
+    {
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "image_url", image_url: { url: sourceImageUrl, detail: "high" } },
+            { type: "text", text: prompt },
+          ],
+        },
+      ],
+      maxTokens: 4096,
+    },
+    parseVision,
+  );
 
-  if (!hasGrokKey()) {
-    spec = sampleSpec(input.medium, sourceImageUrl);
-    spec.flags = [
-      ...spec.flags.filter((f) => f.code !== "parse_failure"),
-      {
-        code: "parse_failure",
-        message:
-          "GROK_API_KEY is not set, so this is a sample spec. Add the key on the server to read your photo. You can still edit it and find decorators.",
-      },
-    ];
-  } else {
-    const prompt = decomposePrompt({
-      medium: input.medium,
-      mediumConstraints: JSON.stringify(mediumConstraintsJson, null, 2),
+  let vision = parsed.ok ? parsed.value : null;
+  if (!parsed.ok) {
+    console.error("decompose grok failed", grokLog(parsed.error));
+    if (parsed.error.kind !== "parse") {
+      return err({ kind: "vision", message: describeGrokError(parsed.error) });
+    }
+    const retryPrompt = decomposePrompt({
       schema: schemaHint(),
+      retryError: parsed.error.raw.slice(0, 1500),
     });
-    const parsed = await grokJson(
+    const retried = await grokJson(
       {
         messages: [
           {
             role: "user",
             content: [
-              { type: "image_url", image_url: { url: sourceImageUrl } },
-              { type: "text", text: prompt },
+              { type: "image_url", image_url: { url: sourceImageUrl, detail: "high" } },
+              { type: "text", text: retryPrompt },
             ],
           },
         ],
+        jsonMode: false,
+        maxTokens: 4096,
       },
-      (value) => cakeSpecBodySchema.parse(value),
+      parseVision,
     );
-
-    if (!parsed.ok) {
-      const retryPrompt = decomposePrompt({
-        medium: input.medium,
-        mediumConstraints: JSON.stringify(mediumConstraintsJson, null, 2),
-        schema: schemaHint(),
-        retryError: parsed.error.kind === "parse" ? parsed.error.raw : parsed.error.kind,
-      });
-      const retried = await grokJson(
-        {
-          messages: [
-            {
-              role: "user",
-              content: [
-                { type: "image_url", image_url: { url: sourceImageUrl } },
-                { type: "text", text: retryPrompt },
-              ],
-            },
-          ],
-        },
-        (value) => cakeSpecBodySchema.parse(value),
-      );
-      if (!retried.ok) {
-        spec = sampleSpec(input.medium, sourceImageUrl);
-        spec.confidence = {
-          structure: 0.2,
-          frosting: 0.2,
-          piping: 0.2,
-          decor: 0.2,
-          finish: 0.2,
-        };
-        spec.flags.push({
-          code: "parse_failure",
-          message:
-            "Couldn't parse the model output into a spec. This is a partial spec you can edit. Try a brighter, straight-on shot.",
-        });
-      } else {
-        spec = cakeSpecSchema.parse({
-          ...retried.value,
-          id: randomUUID(),
-          sourceImageUrl,
-          createdAt: new Date(),
-          editedByUser: false,
-        });
-      }
-    } else {
-      spec = cakeSpecSchema.parse({
-        ...parsed.value,
-        id: randomUUID(),
-        sourceImageUrl,
-        createdAt: new Date(),
-        editedByUser: false,
-      });
+    if (!retried.ok) {
+      console.error("decompose grok retry failed", grokLog(retried.error));
+      return err({ kind: "vision", message: describeGrokError(retried.error) });
     }
+    vision = retried.value;
   }
 
-  spec.medium = input.medium;
-  spec = hydrateDerivedTips(applyMediumConstraints(spec));
-  spec.structure.supportRequired =
-    spec.structure.tierCount > 1 || spec.structure.tiers.some((t) => t.shape === "sculpted");
+  if (!vision) {
+    return err({
+      kind: "vision",
+      message:
+        "Grok returned a response that was not a spec. The photo reached xAI; the model output could not be read.",
+    });
+  }
 
+  let spec = toCakeSpec(vision, sourceImageUrl);
+  spec = hydrateDerivedTips(applyMediumConstraints(spec));
+  spec.structure.supportRequired = spec.structure.tierCount > 1;
   await saveSpec(spec);
   return ok(spec);
 }
@@ -174,6 +184,8 @@ export async function specFromExample(
   cloned.id = randomUUID();
   cloned.createdAt = new Date();
   cloned.editedByUser = false;
+  cloned.frosting = { primary: null };
+  cloned.summaries = summariesFromVision(cloned);
   const spec = applyMediumConstraints(hydrateDerivedTips(cloned));
   await saveSpec(spec);
   return spec;

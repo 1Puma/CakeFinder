@@ -1,32 +1,33 @@
 :root {
-  --ink: #1f2d3d;
-  --icing: #fff2cc;
-  --butter: #ffe599;
-  --sunflower: #fdce40;
-  --rose: #ef89bb;
-  --sky: #6fa8dc;
-  --gel-structure: #6fa8dc;
-  --gel-frosting: #fdce40;
-  --gel-piping: #ef89bb;
-  --gel-decor: #c45a94;
-  --gel-finish: #3a6ea3;
-  --slate-60: #5c5346;
-  --amber-flag: #b8860b;
-  --hairline: #1f2d3d;
+  --surface: #fbfaf8;
+  --card: #ffffff;
+  --ink: #2e1a45;
+  --ink-soft: #6b6478;
+  --hairline: rgba(46, 26, 69, 0.1);
 
-  --radius-data: 2px;
-  --radius-image: 16px;
+  --acc-coating: #2fb8af;
+  --acc-borders: #e23d2e;
+  --acc-accents: #f5b02e;
+  --acc-finishes: #7b4ba8;
+  --acc-toppings: #c4739a;
 
+  --r-card: 18px;
+  --r-control: 10px;
+  --r-image: 20px;
+
+  --shadow-card: 0 1px 2px rgb(46 26 69 / 0.04), 0 8px 24px rgb(46 26 69 / 0.06);
+
+  --amber-flag: #c77700;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-6: 24px;
+  --space-8: 28px;
   --space-10: 40px;
   --space-16: 64px;
 
   --motion-state: 180ms cubic-bezier(0, 0, 0.2, 1);
-  --motion-explode: 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
 
   --bp-md: 768px;
   --bp-lg: 1120px;
@@ -34,50 +35,56 @@
   --font-display-stack: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
   --font-body-stack: var(--font-body-face), ui-sans-serif, system-ui, sans-serif;
   --font-data-stack: var(--font-data-face), ui-monospace, monospace;
-
-  --shadow-explode: 0 12px 32px rgb(31 45 61 / 0.18);
-}
-
-@theme inline {
-  --color-ink: var(--ink);
-  --color-icing: var(--icing);
-  --color-butter: var(--butter);
-  --color-sunflower: var(--sunflower);
-  --color-rose: var(--rose);
-  --color-sky: var(--sky);
-  --color-gel-structure: var(--gel-structure);
-  --color-gel-frosting: var(--gel-frosting);
-  --color-gel-piping: var(--gel-piping);
-  --color-gel-decor: var(--gel-decor);
-  --color-gel-finish: var(--gel-finish);
-  --color-slate: var(--slate-60);
-  --color-flag: var(--amber-flag);
   --font-display: var(--font-display-stack);
   --font-body: var(--font-body-stack);
   --font-data: var(--font-data-stack);
-  --radius-data: var(--radius-data);
-  --radius-image: var(--radius-image);
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-hairline: var(--hairline);
+  --color-acc-coating: var(--acc-coating);
+  --color-acc-borders: var(--acc-borders);
+  --color-acc-accents: var(--acc-accents);
+  --color-acc-finishes: var(--acc-finishes);
+  --color-acc-toppings: var(--acc-toppings);
+  --color-slate: var(--ink-soft);
+  --color-flag: var(--amber-flag);
+  --color-icing: var(--card);
+  --font-display: var(--font-display-stack);
+  --font-body: var(--font-body-stack);
+  --font-data: var(--font-data-stack);
+  --radius-card: var(--r-card);
+  --radius-control: var(--r-control);
+  --radius-image: var(--r-image);
+  --breakpoint-desk: 1120px;
 }
 
 html,
 body {
-  background: var(--icing);
+  background: var(--surface);
   color: var(--ink);
-  font-family: var(--font-body-stack);
+  font-family: var(--font-body);
   font-size: 15px;
-  line-height: 1.45;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
 h1,
 h2,
 h3 {
-  font-family: var(--font-display-stack);
+  font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
-.data {
-  font-family: var(--font-data-stack);
+.data,
+.font-data {
+  font-family: var(--font-data);
   letter-spacing: 0.02em;
 }
 
@@ -94,7 +101,7 @@ textarea {
 }
 
 :focus-visible {
-  outline: 2px solid var(--sky);
+  outline: 2px solid var(--acc-coating);
   outline-offset: 2px;
 }
 
@@ -105,15 +112,17 @@ textarea {
   min-height: 44px;
   min-width: 44px;
   padding: 0 var(--space-4);
-  background: var(--sunflower);
+  background: var(--ink);
+  color: var(--card);
   border: 1px solid var(--ink);
-  border-radius: var(--radius-data);
+  border-radius: var(--r-control);
   font-weight: 500;
   cursor: pointer;
 }
 
 .btn-quiet {
-  background: var(--butter);
+  background: var(--card);
+  color: var(--ink);
 }
 
 .btn:disabled {
@@ -121,14 +130,68 @@ textarea {
   cursor: not-allowed;
 }
 
-.hairline {
-  border: 1px solid var(--ink);
+.card {
+  background: var(--card);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-card);
 }
 
-.panel {
-  background: var(--butter);
-  border: 1px solid var(--ink);
-  border-radius: var(--radius-data);
+.spec-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.spec-value {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.spec-select,
+.spec-note {
+  border-radius: var(--r-control);
+  border: 1px solid var(--hairline);
+  background: var(--card);
+}
+
+.spec-note {
+  width: 100%;
+  min-height: 72px;
+  padding: var(--space-3);
+  resize: vertical;
+}
+
+details > summary {
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::after {
+  content: "+";
+  margin-left: auto;
+  font-family: var(--font-data);
+}
+
+details[open] > summary::after {
+  content: "–";
+}
+
+.trace-line {
+  animation: trace-in var(--motion-state) both;
+}
+
+@keyframes trace-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

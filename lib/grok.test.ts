@@ -48,10 +48,30 @@ describe("grokJson", () => {
     process.env.GROK_API_KEY = "test-key";
     resetEnvCache();
     const result = await grokJson(
-      { messages: [{ role: "user", content: "ping" }], fetchImpl },
+      {
+        messages: [{ role: "user", content: "ping" }],
+        fetchImpl,
+      },
       (value) => value as { ok: boolean },
     );
     assert.equal(result.ok, true);
     assert.equal(calls, 2);
+  });
+
+  it("reads JSON from reasoning_content when content is empty", async () => {
+    const fetchImpl: typeof fetch = async () =>
+      new Response(
+        JSON.stringify({
+          choices: [{ message: { content: "", reasoning_content: '{"ok":true}' } }],
+        }),
+        { status: 200 },
+      );
+    process.env.GROK_API_KEY = "test-key";
+    resetEnvCache();
+    const result = await grokJson(
+      { messages: [{ role: "user", content: "ping" }], fetchImpl },
+      (value) => value as { ok: boolean },
+    );
+    assert.equal(result.ok, true);
   });
 });
