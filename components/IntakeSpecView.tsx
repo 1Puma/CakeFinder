@@ -7,7 +7,7 @@ import { specToRequiredFlags } from "@/lib/capability";
 import { persistSpec, readPersistedSpec } from "@/lib/spec-cache";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SpecEditor } from "@/components/SpecEditor";
-import { ExplodedView } from "@/components/ExplodedView";
+import { PhotoPanel } from "@/components/PhotoPanel";
 import { useMinWidth } from "@/lib/use-min-width";
 import type { Decorator } from "@/lib/types";
 
@@ -69,11 +69,11 @@ export function IntakeSpecView(props: {
       <SiteHeader trailing={<span className="data text-[13px]">{props.bakeryName}</span>} />
       <div className="grid min-w-0 md:grid-cols-[55%_45%] desk:grid-cols-[60%_40%]">
         <div className="p-4">
-          <ExplodedView spec={spec} activeId={active} />
+          <PhotoPanel spec={spec} activeId={active} />
         </div>
         <div className="p-4">
           {cannot.length > 0 ? (
-            <p className="mb-3 border-l-[3px] border-[var(--amber-flag)] bg-icing px-3 py-2">
+            <p className="mb-3 border-l-[3px] border-[var(--amber-flag)] bg-card px-3 py-2">
               Cannot fulfill before quoting: {cannot.join(", ")}. Flag this to the bench.
             </p>
           ) : (

@@ -42,7 +42,7 @@ export function UploadDropzone() {
           aria-label="City"
         />
       </label>
-      <label className="flex cursor-pointer flex-col items-start gap-2 border border-dashed border-ink bg-icing p-6">
+      <label className="flex cursor-pointer flex-col items-start gap-2 border border-dashed border-hairline bg-card p-6">
         <span className="font-medium">Drop a cake photo</span>
         <span className="text-slate">
           Pinterest screenshots work fine. Camera capture is available on phones.

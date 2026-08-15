@@ -6,7 +6,7 @@ import { fixtureSpecs } from "./fixtures";
 import { grokJson } from "./grok";
 import { resizeForVision } from "./image";
 import { err, ok, type Result } from "./result";
-import { lookupBorderTip, cakeSpecBodySchema, cakeSpecSchema, type CakeSpec } from "./taxonomy";
+import { lookupBorderTip, cakeSpecVisionSchema, cakeSpecSchema, type CakeSpec } from "./taxonomy";
 import { saveSpec } from "./store/index";
 import mediumConstraintsJson from "../data/taxonomy/medium-constraints.json";
 import { decomposePrompt } from "../prompts/decompose";
@@ -19,13 +19,11 @@ export type DecomposeError = {
 function hydrateDerivedTips(spec: CakeSpec): CakeSpec {
   return {
     ...spec,
-    piping: {
-      ...spec.piping,
-      borders: spec.piping.borders.map((border) => ({
-        ...border,
-        derivedTip: lookupBorderTip(border.type),
-      })),
-    },
+    frosting: spec.frosting ?? { primary: null },
+    borders: spec.borders.map((border) => ({
+      ...border,
+      derivedTip: lookupBorderTip(border.type),
+    })),
   };
 }
 
@@ -38,6 +36,7 @@ function sampleSpec(medium: "layered" | "ice_cream", sourceImageUrl: string): Ca
     sourceImageUrl,
     createdAt: new Date(),
     editedByUser: false,
+    frosting: { primary: null },
   };
 }
 
@@ -46,14 +45,21 @@ function schemaHint(): string {
   "medium": "layered" | "ice_cream",
   "sourceImageUrl": string,
   "structure": { "tierCount": number, "tiers": [{ "index": number, "shape": string, "approximateDiameterInches": number|null, "approximateHeightInches": number|null, "visualDescription": string, "locator": string }], "estimatedServings": number|null, "supportRequired": boolean },
-  "frosting": { "primary": FrostingType, "secondary": FrostingType|null, "colors": ColorRef[] },
-  "piping": { "borders": [{ "type": string, "derivedTip": string, "placement": string, "repeatCount": number|null, "colorRef": string, "visualDescription": string, "locator": string }], "surfaceElements": [{ "kind": string, "inferredNozzleFamily": string|null, "ridgeCharacter": string|null, "count": number|null, "colorRef": string, "visualDescription": string, "locator": string }] },
-  "decor": { "ediblePrint": { "approximateSizeInches": number|null, "shape": string, "subject": string, "visualDescription": string, "locator": string }|null, "licensedCharacters": LicensedCharacter[], "nonEdibleToppers": string[], "sculptural": SculpturalElement[], "freshFlorals": boolean },
-  "finish": { "metallicLeaf": "gold"|"silver"|"none", pearls, sprinkles, edibleGlitter, isomalt, waferPaper, airbrush, drip, marbling, texturedPaletteKnife },
-  "confidence": { structure, frosting, piping, decor, finish },
+  "coating": { "style": string, "visualDescription": string, "locator": string } | null,
+  "borders": [{ "type": string, "derivedTip": string, "visualDescription": string, "locator": string }],
+  "accents": [{ "type": string, "count": number|null, "visualDescription": string, "locator": string }],
+  "finishes": [{ "type": string, "visualDescription": string, "locator": string }],
+  "toppings": { "kinds": [{ "type": string, "visualDescription": string, "locator": string }], "items": [{ "item": string, "brandNamed": boolean, "count": number|null, "arrangement": string, "visualDescription": string, "locator": string }] },
+  "confidence": { structure, coating, borders, accents, finishes, toppings },
   "flags": [],
   "editedByUser": false
 }`;
+}
+
+function withFrostingUnset(
+  vision: ReturnType<typeof cakeSpecVisionSchema.parse>,
+): Omit<CakeSpec, "id" | "createdAt"> {
+  return { ...vision, frosting: { primary: null } };
 }
 
 export async function decompose(input: {
@@ -100,7 +106,7 @@ export async function decompose(input: {
           },
         ],
       },
-      (value) => cakeSpecBodySchema.parse(value),
+      (value) => cakeSpecVisionSchema.parse(value),
     );
 
     if (!parsed.ok) {
@@ -122,16 +128,17 @@ export async function decompose(input: {
             },
           ],
         },
-        (value) => cakeSpecBodySchema.parse(value),
+        (value) => cakeSpecVisionSchema.parse(value),
       );
       if (!retried.ok) {
         spec = sampleSpec(input.medium, sourceImageUrl);
         spec.confidence = {
           structure: 0.2,
-          frosting: 0.2,
-          piping: 0.2,
-          decor: 0.2,
-          finish: 0.2,
+          coating: 0.2,
+          borders: 0.2,
+          accents: 0.2,
+          finishes: 0.2,
+          toppings: 0.2,
         };
         spec.flags.push({
           code: "parse_failure",
@@ -140,7 +147,7 @@ export async function decompose(input: {
         });
       } else {
         spec = cakeSpecSchema.parse({
-          ...retried.value,
+          ...withFrostingUnset(retried.value),
           id: randomUUID(),
           sourceImageUrl,
           createdAt: new Date(),
@@ -149,7 +156,7 @@ export async function decompose(input: {
       }
     } else {
       spec = cakeSpecSchema.parse({
-        ...parsed.value,
+        ...withFrostingUnset(parsed.value),
         id: randomUUID(),
         sourceImageUrl,
         createdAt: new Date(),
@@ -159,9 +166,9 @@ export async function decompose(input: {
   }
 
   spec.medium = input.medium;
+  spec.frosting = { primary: null };
   spec = hydrateDerivedTips(applyMediumConstraints(spec));
-  spec.structure.supportRequired =
-    spec.structure.tierCount > 1 || spec.structure.tiers.some((t) => t.shape === "sculpted");
+  spec.structure.supportRequired = spec.structure.tierCount > 1;
 
   await saveSpec(spec);
   return ok(spec);
@@ -174,6 +181,7 @@ export async function specFromExample(
   cloned.id = randomUUID();
   cloned.createdAt = new Date();
   cloned.editedByUser = false;
+  cloned.frosting = { primary: null };
   const spec = applyMediumConstraints(hydrateDerivedTips(cloned));
   await saveSpec(spec);
   return spec;

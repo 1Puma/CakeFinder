@@ -74,7 +74,7 @@ export type Match = {
   decorator: Decorator;
   matchedFlags: CapabilityFlag[];
   missingFlags: CapabilityFlag[];
-  categoryScores: Record<"structure" | "frosting" | "piping" | "decor" | "finish", number>;
+  categoryScores: Record<"coating" | "borders" | "accents" | "finishes" | "toppings", number>;
   reasoning: string;
   distanceMiles: number;
 };

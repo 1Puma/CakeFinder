@@ -19,43 +19,27 @@ export function applyMediumConstraints(spec: CakeSpec): CakeSpec {
     return { ...tier, index };
   });
 
-  const frostingAllowed = new Set(rules.frostingAllowed);
-  let primary = spec.frosting.primary;
-  if (!frostingAllowed.has(primary)) {
-    stripped.push(`frosting:${primary}`);
-    primary = "pastry_pride";
-  }
-  let secondary = spec.frosting.secondary;
-  if (secondary && !frostingAllowed.has(secondary)) {
-    stripped.push(`frosting:${secondary}`);
-    secondary = null;
+  let frostingPrimary = spec.frosting.primary;
+  if (frostingPrimary && !rules.frostingAllowed.includes(frostingPrimary)) {
+    stripped.push(`frosting:${frostingPrimary}`);
+    frostingPrimary = null;
   }
 
-  const finish = { ...spec.finish };
-  if (rules.excludedFinish.includes("metallicLeaf") && finish.metallicLeaf !== "none") {
-    stripped.push(`finish:metallicLeaf:${finish.metallicLeaf}`);
-    finish.metallicLeaf = "none";
-  }
-  if (rules.excludedFinish.includes("isomalt") && finish.isomalt) {
-    stripped.push("finish:isomalt");
-    finish.isomalt = false;
-  }
-  if (rules.excludedFinish.includes("waferPaper") && finish.waferPaper) {
-    stripped.push("finish:waferPaper");
-    finish.waferPaper = false;
-  }
+  const finishes = spec.finishes.filter((item) => {
+    if (rules.excludedFinishes.includes(item.type)) {
+      stripped.push(`finish:${item.type}`);
+      return false;
+    }
+    return true;
+  });
 
-  let freshFlorals = spec.decor.freshFlorals;
-  if (rules.excludedDecor.includes("freshFlorals") && freshFlorals) {
-    stripped.push("decor:freshFlorals");
-    freshFlorals = false;
-  }
-
-  let sculptural = spec.decor.sculptural;
-  if (!rules.sculpturalAllowed && sculptural.length > 0) {
-    stripped.push("decor:sculptural");
-    sculptural = [];
-  }
+  const kinds = spec.toppings.kinds.filter((item) => {
+    if (rules.excludedToppings.includes(item.type)) {
+      stripped.push(`topping:${item.type}`);
+      return false;
+    }
+    return true;
+  });
 
   const flags: SpecFlag[] = spec.flags.filter((f) => f.code !== "medium_constraint");
   if (stripped.length > 0) {
@@ -74,9 +58,9 @@ export function applyMediumConstraints(spec: CakeSpec): CakeSpec {
       tiers,
       supportRequired: false,
     },
-    frosting: { ...spec.frosting, primary, secondary },
-    decor: { ...spec.decor, freshFlorals, sculptural },
-    finish,
+    frosting: { primary: frostingPrimary },
+    finishes,
+    toppings: { ...spec.toppings, kinds },
     flags,
   };
 }

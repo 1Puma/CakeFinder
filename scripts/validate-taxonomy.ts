@@ -1,29 +1,25 @@
 import { cakeSpecSchema } from "../lib/taxonomy";
 import { fixtureSpecs } from "../lib/fixtures";
-import {
-  buildSpecZodSchema,
-  buildTaxonomyPromptSection,
-  borderTypes,
-  nozzleFamilies,
-} from "../lib/taxonomy";
+import { buildSpecZodSchema, buildTaxonomyPromptSection, borderChoices } from "../lib/taxonomy";
 
 const errors: string[] = [];
 
-if (borderTypes.length < 7) {
-  errors.push("borders.json must include the seven base morphologies");
+if (borderChoices.length !== 5) {
+  errors.push("borders.json must include the five border choices");
 }
 
-const petal = nozzleFamilies.find((n) => n.id === "petal");
-if (
-  !petal?.capabilityFlags.includes("border:ruffle") ||
-  !petal.capabilityFlags.includes("surface:sugar_floral")
-) {
-  errors.push("petal nozzle must map to both ruffle borders and florals");
+const shell = borderChoices.find((b) => b.id === "shell");
+if (shell?.derivedTip !== "#32") {
+  errors.push("shell border must derive tip #32");
 }
 
 const prompt = buildTaxonomyPromptSection();
-if (!prompt.includes("shell") || !prompt.includes("TAXONOMY")) {
-  errors.push("taxonomy prompt section is missing core content");
+if (
+  !prompt.includes("shell") ||
+  !prompt.includes("TAXONOMY") ||
+  prompt.toLowerCase().includes("nozzle")
+) {
+  errors.push("taxonomy prompt section is missing core content or still mentions nozzles");
 }
 
 const schema = buildSpecZodSchema();

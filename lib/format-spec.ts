@@ -7,52 +7,42 @@ export function specPlainLanguage(spec: CakeSpec): string {
         `Tier ${t.index + 1}: ${labelFor("shape", t.shape)}${t.approximateDiameterInches ? `, ~${t.approximateDiameterInches}"` : ""}`,
     )
     .join("; ");
-  const borders = spec.piping.borders
-    .map(
-      (b) =>
-        `${b.type.replaceAll("_", " ")} at ${b.placement.replaceAll("_", " ")} (tip ${b.derivedTip})`,
-    )
+  const borders = spec.borders
+    .map((b) => `${labelFor("border", b.type)} (tip ${b.derivedTip})`)
     .join("; ");
-  const surface = spec.piping.surfaceElements
-    .map((s) => `${s.kind.replaceAll("_", " ")}${s.count ? ` ×${s.count}` : ""}`)
+  const accents = spec.accents
+    .map((a) => `${labelFor("accent", a.type)}${a.count ? ` ×${a.count}` : ""}`)
     .join("; ");
-  const print = spec.decor.ediblePrint
-    ? `Edible print: ${spec.decor.ediblePrint.subject} (${spec.decor.ediblePrint.shape}, ${spec.decor.ediblePrint.approximateSizeInches ?? "size unknown"}")`
-    : "No edible print";
-  const licensed = spec.decor.licensedCharacters.length
-    ? spec.decor.licensedCharacters
-        .map((c) => c.detectedName ?? c.franchise ?? "unidentified copyrighted character")
-        .join(", ")
-    : "None";
-  const finishBits = [
-    spec.finish.metallicLeaf !== "none" ? `${spec.finish.metallicLeaf} leaf` : null,
-    spec.finish.pearls ? "pearls" : null,
-    spec.finish.sprinkles ? "sprinkles" : null,
-    spec.finish.edibleGlitter ? "edible glitter" : null,
-    spec.finish.isomalt ? "isomalt" : null,
-    spec.finish.waferPaper ? "wafer paper" : null,
-    spec.finish.airbrush ? "airbrush" : null,
-    spec.finish.drip ? "drip" : null,
-    spec.finish.marbling ? "marbling" : null,
-    spec.finish.texturedPaletteKnife ? "palette-knife texture" : null,
-  ].filter((v): v is string => v !== null);
+  const finishes = spec.finishes.map((f) => labelFor("finish", f.type)).join("; ");
+  const kinds = spec.toppings.kinds.map((k) => labelFor("topping", k.type)).join("; ");
+  const items = spec.toppings.items
+    .map((item) => {
+      const count = item.count != null ? `${item.count} ` : "";
+      return `${count}${item.item}, ${item.arrangement}`;
+    })
+    .join("; ");
+  const frosting = spec.frosting.primary
+    ? labelFor("frosting", spec.frosting.primary)
+    : "not chosen yet";
 
   return [
     `Medium: ${spec.medium === "ice_cream" ? "ice cream cake" : "layered cake"}`,
-    `Structure: ${spec.structure.tierCount} tier(s). ${tiers}. Servings ~${spec.structure.estimatedServings ?? "unknown"}. Support ${spec.structure.supportRequired ? "required" : "not required"}.`,
-    `Frosting: ${labelFor("frosting", spec.frosting.primary)}${spec.frosting.secondary ? ` over ${labelFor("frosting", spec.frosting.secondary)}` : ""}.`,
-    `Piping: ${borders || "none listed"}. Surface: ${surface || "none listed"}.`,
-    `Decor: ${print}. Licensed characters: ${licensed}. Fresh florals: ${spec.decor.freshFlorals ? "yes" : "no"}.`,
-    `Finish: ${finishBits.join(", ") || "plain"}.`,
+    `Structure: ${spec.structure.tierCount} tier(s). ${tiers}. Servings ~${spec.structure.estimatedServings ?? "unknown"}.`,
+    `Frosting: ${frosting}.`,
+    `Coating: ${spec.coating ? labelFor("coating", spec.coating.style) : "none listed"}.`,
+    `Borders: ${borders || "none listed"}.`,
+    `Accents: ${accents || "none listed"}.`,
+    `Finishes: ${finishes || "none listed"}.`,
+    `Toppings: ${kinds || "none listed"}. ${items ? `Items: ${items}.` : ""}`,
   ].join("\n");
 }
 
 export function complexityLabel(spec: CakeSpec): string {
   let score = spec.structure.tierCount;
-  if (spec.frosting.primary === "fondant") score += 2;
-  if (spec.finish.metallicLeaf !== "none") score += 2;
-  if (spec.decor.sculptural.length > 0) score += 2;
-  if (spec.piping.borders.some((b) => b.type === "drop_string" || b.type === "scroll")) score += 1;
+  if (spec.coating?.style === "fault_line") score += 2;
+  if (spec.toppings.kinds.some((k) => k.type === "gold_leaf" || k.type === "sugarwork")) score += 2;
+  if (spec.accents.some((a) => a.type === "piped_flowers")) score += 1;
+  if (spec.borders.some((b) => b.type === "cornelli")) score += 1;
   if (score <= 3) return "Straightforward bench work.";
   if (score <= 6) return "Intermediate: stacked structure and detailed piping.";
   return "Advanced: plan extra bench time for structure and finish work.";

@@ -9,7 +9,10 @@ describe("nl fallback", () => {
     const spec = cakeSpecSchema.parse(fixtureSpecs.tieredFondant);
     const result = applyNaturalLanguageFallback(spec, "make it two tiers and drop the gold leaf");
     assert.equal(result.spec.structure.tierCount, 2);
-    assert.equal(result.spec.finish.metallicLeaf, "none");
+    assert.equal(
+      result.spec.toppings.kinds.some((k) => k.type === "gold_leaf"),
+      false,
+    );
     assert.ok(result.changes.length >= 2);
   });
 });

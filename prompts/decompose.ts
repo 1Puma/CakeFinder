@@ -12,45 +12,40 @@ export function decomposePrompt(args: {
 
   return `You are a cake decorating specialist producing a build specification from a photograph.
 
-Your job is to identify what techniques and materials were used to make this cake,
+Your job is to identify the decorative choices used to make this cake,
 so a different decorator could reproduce it.
 
 CRITICAL RULES:
 
-A TIER is a separate stacked cake with its own diameter, sitting on top of
-another cake. Decorative bands, borders, rows of piping, ruffle arches, and
-rings of rosettes are NOT tiers.
+A TIER exists only where a SMALLER cake shape sits on top of a LARGER cake
+shape. Look for a step change in diameter with a visible ledge.
 
-Count a tier only where you can see a diameter change or a visible seam
-between two stacked cakes.
+Decorative bands, borders, drips, rows of piping, and rings of rosettes are
+NOT tiers. A tall single cake is one tier no matter how many bands of
+decoration it carries.
 
-Most cakes are one tier. If you are not certain a second cake is stacked on
-the first, report tierCount: 1.
+Default to 1. Only report 2 or more when you can see a smaller shape resting
+on a larger one.
 
-1. Classify border SHAPE, never piping tip number.
-   Three different borders (straight, wavy, bead) all come from a #10 round tip.
-   Tip numbers are derived from shape by lookup — that is not your job.
-   Report the morphology you can see.
+1. Do not detect or guess frosting type. Buttercream, Pastry Pride, and
+   whipped coatings look the same in a photograph. Omit frosting from the JSON.
 
-2. For rosettes and swirls, report ridge character (fine / medium / bold),
-   not a specific tip. Open star, closed star, and French star all produce
-   rosettes and are not reliably distinguishable in a photograph.
+2. Classify borders by the decorative choice (shell, bead, ruffle, scallop,
+   cornelli). Tip numbers are derived from that name — not your job.
 
 3. Report only what is visible. Do not infer interior structure, flavor,
-   or filling. If a tier's height is obscured, return null.
+   or filling.
 
-4. Give a confidence score per category. Be honest — a low score on a
-   genuinely ambiguous category is more useful than a confident guess.
+4. Give a confidence score per detected category. Be honest.
 
-5. If you recognize a copyrighted or trademarked character, report it in
-   licensedCharacters. Do not omit it. Do not attempt to identify the
-   franchise if you are unsure — report detectedName: null with the
-   franchise you suspect.
+5. Named confections on the cake (Oreo, macaron, Kit Kat, berries, shards)
+   go in toppings.items: name the item, whether it is brand-named, count it,
+   and describe the arrangement in words. "There is a cookie on it" is not
+   a spec.
 
-6. Every tier, border, surface element, and edible print must include
-   visualDescription (one sentence, decorator vocabulary) and locator
-   (where it sits, in plain words). Describe position in words a person
-   would use, never as coordinates or pixel positions.
+6. Every coating, border, accent, finish, topping kind, topping item, and
+   tier must include visualDescription and locator. Describe position in
+   words a person would use, never as coordinates or pixel positions.
 
 Medium for this photo: ${args.medium}
 
@@ -60,6 +55,7 @@ MEDIUM CONSTRAINTS
 ${args.mediumConstraints}
 
 Return JSON matching this schema exactly. Do not wrap in markdown.
+Do not include a frosting field.
 ${args.schema}
 ${retry}`;
 }

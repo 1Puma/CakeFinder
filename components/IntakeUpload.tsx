@@ -41,7 +41,7 @@ export function IntakeUpload(props: { bakeryId: string; bakeryName: string }) {
         <div className="mt-6">
           <MediumToggle value={medium} onChange={setMedium} />
         </div>
-        <label className="mt-4 flex cursor-pointer flex-col gap-2 border border-dashed border-ink p-6">
+        <label className="mt-4 flex cursor-pointer flex-col gap-2 border border-dashed border-hairline p-6">
           Drop a cake photo
           <input
             className="sr-only"

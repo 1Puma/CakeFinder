@@ -11,7 +11,7 @@ export function NlEditForm(props: {
 
   return (
     <form
-      className="fixed inset-x-0 bottom-0 z-20 border-t border-ink bg-icing p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:static"
+      className="fixed inset-x-0 bottom-0 z-20 border-t border-hairline bg-card p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:static"
       onSubmit={(event) => {
         event.preventDefault();
         if (!value.trim()) return;

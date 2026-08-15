@@ -1,0 +1,40 @@
+{
+  "choices": [
+    {
+      "id": "confection",
+      "label": "Toppings",
+      "description": "Fresh berries, chocolate shards, macarons, or edible flowers arranged on top",
+      "rarity": 0.3
+    },
+    {
+      "id": "sprinkles",
+      "label": "Sprinkles / nonpareils",
+      "description": "Sugar pearls or jimmies on dollops, borders, or pressed onto the base",
+      "rarity": 0.2
+    },
+    {
+      "id": "gold_leaf",
+      "label": "Gold leaf / edible shimmer",
+      "description": "Fine metallic flakes or brushed lustre dust",
+      "rarity": 0.7
+    },
+    {
+      "id": "sugarwork",
+      "label": "Sugarwork / isomalt sails",
+      "description": "Translucent glass-like melted sugar waves or splash sculptures",
+      "rarity": 0.8
+    },
+    {
+      "id": "wafer_paper",
+      "label": "Wafer paper elements",
+      "description": "Delicate edible paper sails, ruffles, or soft realistic petals",
+      "rarity": 0.65
+    },
+    {
+      "id": "fondant_cutouts",
+      "label": "Fondant cutouts & plaques",
+      "description": "Pressed 2D/3D sugarpaste shapes, bows, letters, or geometric tiles",
+      "rarity": 0.4
+    }
+  ]
+}

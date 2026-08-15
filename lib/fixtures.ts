@@ -3,11 +3,12 @@ import type { CakeSpec } from "./taxonomy";
 const createdAt = new Date("2026-08-15T12:00:00.000Z");
 
 const baseConfidence = {
-  structure: 0.86,
-  frosting: 0.74,
-  piping: 0.81,
-  decor: 0.7,
-  finish: 0.78,
+  structure: 0.88,
+  coating: 0.8,
+  borders: 0.84,
+  accents: 0.72,
+  finishes: 0.7,
+  toppings: 0.76,
 };
 
 export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", CakeSpec> = {
@@ -27,8 +28,7 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
           shape: "round",
           approximateDiameterInches: 10,
           approximateHeightInches: 4,
-          visualDescription:
-            "10-inch round cake, the widest of the stack, covered in ivory fondant",
+          visualDescription: "10-inch round cake, the widest of the stack, smooth ivory coating",
           locator: "base of the cake, sitting on the board",
         },
         {
@@ -36,7 +36,7 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
           shape: "round",
           approximateDiameterInches: 8,
           approximateHeightInches: 4,
-          visualDescription: "8-inch round cake stacked above the base, same ivory fondant",
+          visualDescription: "8-inch round cake stacked above the base",
           locator: "middle of the stack, smaller diameter than the base",
         },
         {
@@ -44,77 +44,54 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
           shape: "round",
           approximateDiameterInches: 6,
           approximateHeightInches: 3.5,
-          visualDescription: "6-inch round top cake with a pressed floral print on the crown",
+          visualDescription: "6-inch round top cake with toppings on the crown",
           locator: "top of the stack, smallest diameter",
         },
       ],
     },
-    frosting: {
-      primary: "fondant",
-      secondary: "buttercream_american",
-      colors: [
-        { hex: "#fff2cc", gelFamily: "ivory", coverage: "primary" },
-        { hex: "#ef89bb", gelFamily: "pink", coverage: "accent" },
-      ],
+    frosting: { primary: null },
+    coating: {
+      style: "smooth",
+      visualDescription: "Crisp, flat ivory coating with sharp edges",
+      locator: "every visible side wall",
     },
-    piping: {
-      borders: [
-        {
-          type: "shell",
-          derivedTip: "#32",
-          placement: "base",
-          repeatCount: 24,
-          colorRef: "#ef89bb",
-          visualDescription:
-            "Ridged pink shell border, each shell fanning forward with a tapering tail",
-          locator: "base of the cake, running around the board edge",
-        },
-        {
-          type: "bead",
-          derivedTip: "#10",
-          placement: "tier_seam",
-          repeatCount: 18,
-          colorRef: "#fdce40",
-          visualDescription: "Small gold beads pinched between spheres along the seam",
-          locator: "tier seam between bottom and middle cake",
-        },
-      ],
-      surfaceElements: [
-        {
-          kind: "rosette",
-          inferredNozzleFamily: "open_star",
-          ridgeCharacter: "medium",
-          count: 6,
-          colorRef: "#ef89bb",
-          visualDescription: "Six open-star rosettes with medium ridges in pink gel",
-          locator: "top surface, evenly spaced around the rim",
-        },
-      ],
-    },
-    decor: {
-      ediblePrint: {
-        approximateSizeInches: 6,
-        shape: "round",
-        subject: "Pressed floral wreath",
-        visualDescription: "Round edible print of a pressed floral wreath, soft pink and ivory",
-        locator: "top of the upper tier, centered",
+    borders: [
+      {
+        type: "shell",
+        derivedTip: "#32",
+        visualDescription: "Ridged shell border, each shell fanning forward with a tapering tail",
+        locator: "base of the cake, running around the board edge",
       },
-      licensedCharacters: [],
-      nonEdibleToppers: [],
-      sculptural: [],
-      freshFlorals: false,
-    },
-    finish: {
-      metallicLeaf: "gold",
-      pearls: true,
-      sprinkles: false,
-      edibleGlitter: false,
-      isomalt: false,
-      waferPaper: false,
-      airbrush: false,
-      drip: false,
-      marbling: false,
-      texturedPaletteKnife: false,
+      {
+        type: "bead",
+        derivedTip: "#10",
+        visualDescription: "Small beads pinched between spheres along the seam",
+        locator: "tier seam between bottom and middle cake",
+      },
+    ],
+    accents: [
+      {
+        type: "rosettes",
+        count: 6,
+        visualDescription: "Six piped rosettes with medium ridges",
+        locator: "top surface, evenly spaced around the rim",
+      },
+    ],
+    finishes: [],
+    toppings: {
+      kinds: [
+        {
+          type: "gold_leaf",
+          visualDescription: "Fine gold leaf flakes catching the light",
+          locator: "accents on the upper tier and seam",
+        },
+        {
+          type: "fondant_cutouts",
+          visualDescription: "Pressed floral plaque on the top cake",
+          locator: "top of the upper tier, centered",
+        },
+      ],
+      items: [],
     },
     confidence: baseConfidence,
     flags: [],
@@ -135,7 +112,7 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
           shape: "round",
           approximateDiameterInches: 9,
           approximateHeightInches: 4,
-          visualDescription: "9-inch round buttercream cake in sky blue",
+          visualDescription: "9-inch round cake with a smooth sky-blue coating",
           locator: "base of the cake, sitting on the board",
         },
         {
@@ -143,86 +120,55 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
           shape: "round",
           approximateDiameterInches: 6,
           approximateHeightInches: 3.5,
-          visualDescription: "6-inch round top tier carrying the character print",
+          visualDescription: "6-inch round top tier carrying toppings",
           locator: "stacked above the base, smaller diameter",
         },
       ],
     },
-    frosting: {
-      primary: "buttercream_american",
-      secondary: null,
-      colors: [
-        { hex: "#6fa8dc", gelFamily: "sky_blue", coverage: "primary" },
-        { hex: "#fdce40", gelFamily: "lemon_yellow", coverage: "accent" },
-      ],
+    frosting: { primary: null },
+    coating: {
+      style: "smooth",
+      visualDescription: "Smooth sky-blue coating",
+      locator: "both tier side walls",
     },
-    piping: {
-      borders: [
-        {
-          type: "shell",
-          derivedTip: "#32",
-          placement: "base",
-          repeatCount: 20,
-          colorRef: "#6fa8dc",
-          visualDescription: "Sky-blue shell border with open-star ridges",
-          locator: "base of the cake, running around the board edge",
-        },
-      ],
-      surfaceElements: [
-        {
-          kind: "lettering",
-          inferredNozzleFamily: "round",
-          ridgeCharacter: null,
-          count: 1,
-          colorRef: "#1f2d3d",
-          visualDescription: "Piped lettering in dark icing across the lower tier",
-          locator: "upper side wall of the base tier",
-        },
-      ],
-    },
-    decor: {
-      ediblePrint: {
-        approximateSizeInches: 5,
-        shape: "round",
-        subject: "Copyrighted cartoon dog on hind legs, blue coat",
-        visualDescription: "Round edible print of a copyrighted cartoon dog in a blue coat",
-        locator: "top of the upper tier, facing the camera",
-      },
-      licensedCharacters: [
-        {
-          detectedName: null,
-          franchise: "animated children's series",
-          confidence: 0.62,
-          complianceStatus: "unknown",
-        },
-      ],
-      nonEdibleToppers: [],
-      sculptural: [],
-      freshFlorals: false,
-    },
-    finish: {
-      metallicLeaf: "none",
-      pearls: false,
-      sprinkles: true,
-      edibleGlitter: false,
-      isomalt: false,
-      waferPaper: false,
-      airbrush: false,
-      drip: false,
-      marbling: false,
-      texturedPaletteKnife: false,
-    },
-    confidence: { ...baseConfidence, decor: 0.58, piping: 0.55 },
-    flags: [
+    borders: [
       {
-        code: "licensed_character",
-        message:
-          "A copyrighted character appears on the cake. Bakeries need a licensed print program to reproduce it.",
+        type: "shell",
+        derivedTip: "#32",
+        visualDescription: "Sky-blue shell border with open ridges",
+        locator: "base of the cake, running around the board edge",
       },
+    ],
+    accents: [
+      {
+        type: "dollops",
+        count: 8,
+        visualDescription: "Piped dollops around the upper rim",
+        locator: "top rim of the upper tier",
+      },
+    ],
+    finishes: [],
+    toppings: {
+      kinds: [
+        {
+          type: "sprinkles",
+          visualDescription: "Jimmies pressed into the base coat",
+          locator: "lower side wall of the base tier",
+        },
+        {
+          type: "fondant_cutouts",
+          visualDescription: "Fondant plaque with a cartoon figure",
+          locator: "top of the upper tier, facing the camera",
+        },
+      ],
+      items: [],
+    },
+    confidence: { ...baseConfidence, borders: 0.55, toppings: 0.58 },
+    flags: [
       {
         code: "low_confidence",
         message: "Not sure about the border. Check this one.",
-        details: ["piping"],
+        details: ["borders"],
       },
     ],
   },
@@ -242,66 +188,66 @@ export const fixtureSpecs: Record<"tieredFondant" | "licensed" | "iceCream", Cak
           shape: "sheet",
           approximateDiameterInches: 13,
           approximateHeightInches: 3,
-          visualDescription: "Single sheet cake, whipped topping, no stacked diameters",
+          visualDescription: "Single sheet cake, no stacked diameters",
           locator: "the whole cake, sitting on a rectangular board",
         },
       ],
     },
-    frosting: {
-      primary: "pastry_pride",
-      secondary: null,
-      colors: [{ hex: "#fff2cc", gelFamily: "ivory", coverage: "primary" }],
+    frosting: { primary: null },
+    coating: {
+      style: "smooth",
+      visualDescription: "Soft whipped coating, even across the top",
+      locator: "top surface and short side walls",
     },
-    piping: {
-      borders: [
-        {
-          type: "shell",
-          derivedTip: "#32",
-          placement: "top_edge",
-          repeatCount: 32,
-          colorRef: "#ef89bb",
-          visualDescription: "Pink shell border piped along the top edge of the sheet",
-          locator: "top edge, running around the rim",
-        },
-      ],
-      surfaceElements: [
-        {
-          kind: "rosette",
-          inferredNozzleFamily: "open_star",
-          ridgeCharacter: "bold",
-          count: 12,
-          colorRef: "#ef89bb",
-          visualDescription: "Bold open-star rosettes in rows across the top",
-          locator: "top surface, in two rows inside the border",
-        },
-      ],
-    },
-    decor: {
-      ediblePrint: {
-        approximateSizeInches: 8,
-        shape: "rectangular",
-        subject: "Birthday balloons",
-        visualDescription: "Rectangular edible print of birthday balloons",
-        locator: "center of the top surface",
+    borders: [
+      {
+        type: "shell",
+        derivedTip: "#32",
+        visualDescription: "Shell border piped along the top edge of the sheet",
+        locator: "top edge, running around the rim",
       },
-      licensedCharacters: [],
-      nonEdibleToppers: ["plastic candle set"],
-      sculptural: [],
-      freshFlorals: false,
+    ],
+    accents: [
+      {
+        type: "rosettes",
+        count: 12,
+        visualDescription: "Bold rosettes in two rows across the top",
+        locator: "top surface, in two rows inside the border",
+      },
+    ],
+    finishes: [],
+    toppings: {
+      kinds: [
+        {
+          type: "sprinkles",
+          visualDescription: "Rainbow sprinkles over the rosettes",
+          locator: "scattered on the top surface",
+        },
+        {
+          type: "confection",
+          visualDescription: "Printed balloon sheet laid on the centre",
+          locator: "center of the top surface",
+        },
+      ],
+      items: [
+        {
+          item: "printed balloon sheet",
+          brandNamed: false,
+          count: 1,
+          arrangement: "centered on the top",
+          visualDescription: "Rectangular printed sheet of birthday balloons",
+          locator: "center of the top surface",
+        },
+      ],
     },
-    finish: {
-      metallicLeaf: "none",
-      pearls: false,
-      sprinkles: true,
-      edibleGlitter: false,
-      isomalt: false,
-      waferPaper: false,
-      airbrush: false,
-      drip: false,
-      marbling: false,
-      texturedPaletteKnife: false,
+    confidence: {
+      structure: 0.9,
+      coating: 0.8,
+      borders: 0.7,
+      accents: 0.75,
+      finishes: 0.82,
+      toppings: 0.75,
     },
-    confidence: { structure: 0.9, frosting: 0.8, piping: 0.7, decor: 0.75, finish: 0.82 },
     flags: [],
   },
 };
@@ -311,18 +257,18 @@ export const exampleMeta = [
     id: "tieredFondant",
     specId: "example-tiered",
     title: "Three-tier fondant",
-    blurb: "Shell border, gold leaf, edible print.",
+    blurb: "Shell border, gold leaf, smooth coating.",
   },
   {
     id: "licensed",
     specId: "example-licensed",
     title: "Character print",
-    blurb: "Licensed image on buttercream. Tests the substitution path.",
+    blurb: "Fondant plaque on a two-tier cake.",
   },
   {
     id: "iceCream",
     specId: "example-ice-cream",
     title: "Ice cream sheet",
-    blurb: "Whipped topping, print, frozen constraints.",
+    blurb: "Whipped coating, print, frozen constraints.",
   },
 ] as const;

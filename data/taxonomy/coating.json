@@ -1,0 +1,34 @@
+{
+  "choices": [
+    {
+      "id": "smooth",
+      "label": "Smooth finish",
+      "description": "Crisp, flat outer layer of buttercream, ganache, or sharp-edged fondant",
+      "rarity": 0.15
+    },
+    {
+      "id": "rustic_palette_knife",
+      "label": "Rustic / textured palette knife",
+      "description": "Intentional swooshes, swirls, or ridges made with an offset spatula",
+      "rarity": 0.35
+    },
+    {
+      "id": "naked",
+      "label": "Naked / semi-naked",
+      "description": "Cake layers visible through a sheer or absent outer coat",
+      "rarity": 0.4
+    },
+    {
+      "id": "comb",
+      "label": "Comb texture",
+      "description": "Horizontal, vertical, or wavy grooves around the sides from a cake comb",
+      "rarity": 0.45
+    },
+    {
+      "id": "fault_line",
+      "label": "Fault line",
+      "description": "Exposed crevice around the middle showing sprinkles, fruit, or gold leaf",
+      "rarity": 0.7
+    }
+  ]
+}

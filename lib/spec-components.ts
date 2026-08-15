@@ -8,36 +8,55 @@ export type SpecComponent = {
 };
 
 export function specComponents(spec: CakeSpec): SpecComponent[] {
-  const items: SpecComponent[] = spec.structure.tiers.map((tier) => ({
-    id: `tier-${tier.index}`,
-    category: "structure",
-    locator: tier.locator,
-    visualDescription: tier.visualDescription,
-  }));
-  spec.piping.borders.forEach((border, index) => {
+  const items: SpecComponent[] = [];
+  if (spec.coating) {
+    items.push({
+      id: "coating",
+      category: "coating",
+      locator: spec.coating.locator,
+      visualDescription: spec.coating.visualDescription,
+    });
+  }
+  spec.borders.forEach((border, index) => {
     items.push({
       id: `border-${index}`,
-      category: "piping",
+      category: "borders",
       locator: border.locator,
       visualDescription: border.visualDescription,
     });
   });
-  spec.piping.surfaceElements.forEach((el, index) => {
+  spec.accents.forEach((accent, index) => {
     items.push({
-      id: `surface-${index}`,
-      category: "piping",
-      locator: el.locator,
-      visualDescription: el.visualDescription,
+      id: `accent-${index}`,
+      category: "accents",
+      locator: accent.locator,
+      visualDescription: accent.visualDescription,
     });
   });
-  if (spec.decor.ediblePrint) {
+  spec.finishes.forEach((finish, index) => {
     items.push({
-      id: "print",
-      category: "decor",
-      locator: spec.decor.ediblePrint.locator,
-      visualDescription: spec.decor.ediblePrint.visualDescription,
+      id: `finish-${index}`,
+      category: "finishes",
+      locator: finish.locator,
+      visualDescription: finish.visualDescription,
     });
-  }
+  });
+  spec.toppings.kinds.forEach((kind, index) => {
+    items.push({
+      id: `topping-kind-${index}`,
+      category: "toppings",
+      locator: kind.locator,
+      visualDescription: kind.visualDescription,
+    });
+  });
+  spec.toppings.items.forEach((item, index) => {
+    items.push({
+      id: `topping-item-${index}`,
+      category: "toppings",
+      locator: item.locator,
+      visualDescription: item.visualDescription,
+    });
+  });
   return items;
 }
 

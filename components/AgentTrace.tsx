@@ -6,18 +6,18 @@ import { useEffect, useRef, useState } from "react";
 function prefixColor(type: TraceStepType): string {
   switch (type) {
     case "plan":
-      return "var(--gel-teal)";
+      return "var(--acc-coating)";
     case "reject":
       return "var(--amber-flag)";
     case "replan":
-      return "var(--gel-coral)";
+      return "var(--acc-borders)";
     case "complete":
-      return "var(--ink-violet)";
+      return "var(--ink)";
     case "search":
     case "evaluate":
     case "substitute":
     case "rank":
-      return "var(--slate-60)";
+      return "var(--ink-soft)";
     default: {
       const _never: never = type;
       return _never;
@@ -80,7 +80,7 @@ export function AgentTrace(props: { steps: TraceStep[]; complete: boolean }) {
 
   return (
     <>
-      <section className="hidden border-t border-ink bg-icing md:block">
+      <section className="hidden border-t border-hairline bg-card md:block">
         <div className="flex items-center justify-between gap-3 px-4 py-3 md:px-6">
           <p className="font-data truncate text-[13px] tracking-[0.02em] text-slate">{summary}</p>
           <button
@@ -97,7 +97,7 @@ export function AgentTrace(props: { steps: TraceStep[]; complete: boolean }) {
 
       <div className="h-14 md:hidden" />
       <div
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-ink bg-icing md:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-hairline bg-card md:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         onTouchStart={(event) => {
           touchStartY.current = event.touches[0]?.clientY ?? null;

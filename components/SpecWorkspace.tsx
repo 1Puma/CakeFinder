@@ -6,7 +6,7 @@ import type { CakeSpec } from "@/lib/taxonomy";
 import type { ChangeDescription } from "@/lib/types";
 import Link from "next/link";
 import { persistSpec, readPersistedSpec, persistMatchCity, readMatchCity } from "@/lib/spec-cache";
-import { ExplodedView } from "@/components/ExplodedView";
+import { PhotoPanel } from "@/components/PhotoPanel";
 import { SpecEditor } from "@/components/SpecEditor";
 import { NlEditForm } from "@/components/NlEditForm";
 import { ChangeDiff } from "@/components/ChangeDiff";
@@ -53,10 +53,7 @@ export function SpecWorkspace(props: { specId: string }) {
   function commit(next: CakeSpec) {
     const hydrated: CakeSpec = {
       ...next,
-      piping: {
-        ...next.piping,
-        borders: next.piping.borders.map((b) => ({ ...b, derivedTip: lookupBorderTip(b.type) })),
-      },
+      borders: next.borders.map((b) => ({ ...b, derivedTip: lookupBorderTip(b.type) })),
     };
     setSpec(hydrated);
     persistSpec(hydrated);
@@ -103,10 +100,10 @@ export function SpecWorkspace(props: { specId: string }) {
       />
       <div className="grid min-w-0 md:grid-cols-[55%_45%] desk:grid-cols-[60%_40%]">
         <div className="min-w-0 p-4 md:p-6">
-          <ExplodedView spec={spec} activeId={active} />
+          <PhotoPanel spec={spec} activeId={active} />
         </div>
-        <div className="min-w-0 border-t border-ink md:border-l md:border-t-0">
-          <div className="p-4">
+        <div className="min-w-0 border-t border-hairline md:border-l md:border-t-0">
+          <div className="card m-4 p-7 md:m-6">
             <p className="data mb-3 text-[13px]">Spec</p>
             {spec.flags.map((flag) => (
               <p key={flag.code + flag.message} className="mb-3 text-[13px] text-flag">
@@ -160,7 +157,7 @@ export function SpecWorkspace(props: { specId: string }) {
           />
         </div>
       </div>
-      <div className="flex flex-wrap items-center gap-3 border-t border-ink px-4 py-3">
+      <div className="flex flex-wrap items-center gap-3 border-t border-hairline px-4 py-3">
         <label className="flex min-h-11 items-center gap-2">
           <span className="spec-label">City</span>
           <input

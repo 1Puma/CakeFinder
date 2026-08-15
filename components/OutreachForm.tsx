@@ -19,7 +19,7 @@ export function OutreachForm(props: {
 
   return (
     <form
-      className="max-w-xl space-y-3 border border-ink bg-icing p-4"
+      className="max-w-xl space-y-3 border border-hairline bg-card p-4"
       onSubmit={(event) => {
         event.preventDefault();
         if (props.decoratorIds.length === 0) {
@@ -95,7 +95,7 @@ export function OutreachForm(props: {
           onChange={(e) => setNotes(e.target.value)}
         />
       </label>
-      <pre className="overflow-auto whitespace-pre-wrap border border-ink bg-icing p-3 text-[13px]">
+      <pre className="overflow-auto whitespace-pre-wrap border border-hairline bg-card p-3 text-[13px]">
         {draft}
       </pre>
       <button type="submit" className="btn">

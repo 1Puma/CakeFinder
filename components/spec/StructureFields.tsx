@@ -3,30 +3,21 @@
 import { structureShapes, type CakeSpec } from "@/lib/taxonomy";
 import { SpecEntry } from "@/components/SpecEntry";
 import { SpecSelect } from "@/components/SpecSelect";
-import { setConfidence } from "@/components/spec/set-confidence";
 
 export function StructureFields(props: {
   spec: CakeSpec;
   onChange: (spec: CakeSpec) => void;
   expanded: boolean;
   onHeaderClick: () => void;
-  activeId: string | null;
-  onSelect: (id: string) => void;
 }) {
   const spec = props.spec;
   return (
     <SpecEntry
-      category="structure"
+      category="coating"
       label="Structure"
       lowConfidence={spec.confidence.structure < 0.6}
-      edited={spec.editedByUser && spec.confidence.structure === 1}
       expanded={props.expanded}
-      selected={props.activeId?.startsWith("tier-") ?? false}
-      onHeaderClick={() => {
-        props.onHeaderClick();
-        const first = spec.structure.tiers[0];
-        if (first) props.onSelect(`tier-${first.index}`);
-      }}
+      onHeaderClick={props.onHeaderClick}
     >
       <label className="mt-2 flex min-h-11 items-center gap-2">
         <span className="spec-label">Tiers</span>
@@ -50,32 +41,23 @@ export function StructureFields(props: {
                 locator: last?.locator ?? "stacked above the previous tier",
               });
             }
-            props.onChange(
-              setConfidence(
-                {
-                  ...spec,
-                  structure: {
-                    ...spec.structure,
-                    tierCount,
-                    tiers: tiers.map((t, index) => ({ ...t, index })),
-                    supportRequired: tierCount > 1,
-                  },
-                },
-                "structure",
-              ),
-            );
+            props.onChange({
+              ...spec,
+              structure: {
+                ...spec.structure,
+                tierCount,
+                tiers: tiers.map((t, index) => ({ ...t, index })),
+                supportRequired: tierCount > 1,
+              },
+              editedByUser: true,
+              confidence: { ...spec.confidence, structure: 1 },
+            });
           }}
         />
       </label>
       {spec.structure.tiers.map((tier, index) => (
         <div key={tier.index} className="mt-2">
-          <button
-            type="button"
-            className="spec-label mb-1 min-h-11 text-left"
-            onClick={() => props.onSelect(`tier-${tier.index}`)}
-          >
-            Tier {index + 1} shape
-          </button>
+          <p className="spec-label mb-1">Tier {index + 1} shape</p>
           <SpecSelect
             aria-label={`Tier ${index + 1} shape`}
             value={tier.shape}
@@ -84,10 +66,12 @@ export function StructureFields(props: {
               const tiers = spec.structure.tiers.map((t, i) =>
                 i === index ? { ...t, shape: value as typeof t.shape } : t,
               );
-              props.onChange(
-                setConfidence({ ...spec, structure: { ...spec.structure, tiers } }, "structure"),
-              );
-              props.onSelect(`tier-${tier.index}`);
+              props.onChange({
+                ...spec,
+                structure: { ...spec.structure, tiers },
+                editedByUser: true,
+                confidence: { ...spec.confidence, structure: 1 },
+              });
             }}
           />
         </div>

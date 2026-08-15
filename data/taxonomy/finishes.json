@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "id": "drips",
+      "label": "Drips",
+      "description": "Controlled runs of ganache, caramel, or candy melts down the edges",
+      "rarity": 0.35
+    },
+    {
+      "id": "mirror_glaze",
+      "label": "Mirror glaze",
+      "description": "Ultra-glossy reflective poured glaze over the whole cake",
+      "rarity": 0.7
+    },
+    {
+      "id": "ombre",
+      "label": "Ombré / colour gradient",
+      "description": "Two or more colours blended from dark to light down the sides",
+      "rarity": 0.55
+    },
+    {
+      "id": "velvet_spray",
+      "label": "Velvet / spray finish",
+      "description": "Fine cocoa butter mist on a cold cake for a suede texture",
+      "rarity": 0.75
+    }
+  ]
+}
