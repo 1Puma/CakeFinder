@@ -1,0 +1,12 @@
+{
+  "excluded": [
+    {
+      "id": "ombre",
+      "reason": "Deliberately excluded from the technique set. Do not classify or request ombre."
+    }
+  ],
+  "notes": [
+    "Classify border morphology, never tip number.",
+    "For rosettes, report ridge character rather than a specific star tip."
+  ]
+}

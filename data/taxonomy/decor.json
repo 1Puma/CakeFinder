@@ -1,0 +1,17 @@
+{
+  "ediblePrintShapes": ["round", "rectangular", "custom_cut"],
+  "sculpturalMediums": [
+    "fondant",
+    "modeling_chocolate",
+    "gum_paste",
+    "rice_cereal_treat",
+    "unknown"
+  ],
+  "complianceStatuses": ["licensed_print_available", "requires_substitution", "unknown"],
+  "flags": [
+    { "id": "edible_print", "label": "Edible print", "rarity": 0.4 },
+    { "id": "licensed_print", "label": "Licensed character print", "rarity": 0.7 },
+    { "id": "sculptural", "label": "Sculptural work", "rarity": 0.65 },
+    { "id": "fresh_florals", "label": "Fresh florals", "rarity": 0.35 }
+  ]
+}
