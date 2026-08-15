@@ -4,7 +4,15 @@ import { decompose, specFromExample } from "@/lib/decompose";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  const form = await request.formData();
+  let form: FormData;
+  try {
+    form = await request.formData();
+  } catch {
+    return NextResponse.json(
+      { error: "Drop a cake photo. Pinterest screenshots work fine." },
+      { status: 400 },
+    );
+  }
   const example = form.get("example");
   if (
     typeof example === "string" &&
