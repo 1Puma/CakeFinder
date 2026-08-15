@@ -1,0 +1,888 @@
+[
+  {
+    "id": "east-side-buttercream",
+    "name": "East Side Buttercream",
+    "city": "Austin, TX",
+    "address": "1410 E 6th St, Austin, TX",
+    "lat": 30.2621,
+    "lng": -97.7249,
+    "rating": 4.8,
+    "reviewCount": 210,
+    "email": "eastside@example.com",
+    "website": "https://example.com/east-side-buttercream",
+    "phone": null,
+    "publishedPrice": "Custom cakes from $8/serving (published, confirm with decorator)",
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "east-side-buttercream", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "es-1",
+        "url": "/seed/portfolio/fondant-tier.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "es-2",
+        "url": "/seed/portfolio/gold-leaf.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "es-3",
+        "url": "/seed/portfolio/shell.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "structure:tiered",
+        "confidence": 0.92,
+        "evidenceImageIds": ["es-1"],
+        "reasoning": "Three stacked round tiers in recent work."
+      },
+      {
+        "flag": "frosting:fondant",
+        "confidence": 0.9,
+        "evidenceImageIds": ["es-1"],
+        "reasoning": "Smooth fondant panels on every visible tier."
+      },
+      {
+        "flag": "frosting:buttercream_american",
+        "confidence": 0.7,
+        "evidenceImageIds": ["es-3"],
+        "reasoning": "Piped buttercream shells at the base."
+      },
+      {
+        "flag": "border:shell",
+        "confidence": 0.88,
+        "evidenceImageIds": ["es-3"],
+        "reasoning": "Ridged fan shells with tapering tails."
+      },
+      {
+        "flag": "finish:metallicLeaf",
+        "confidence": 0.84,
+        "evidenceImageIds": ["es-2"],
+        "reasoning": "Gold leaf shards on the top tier."
+      },
+      {
+        "flag": "finish:pearls",
+        "confidence": 0.6,
+        "evidenceImageIds": ["es-1"],
+        "reasoning": "Sugar pearls along a seam."
+      }
+    ]
+  },
+  {
+    "id": "south-congress-sweets",
+    "name": "South Congress Sweets",
+    "city": "Austin, TX",
+    "address": "1608 S Congress Ave, Austin, TX",
+    "lat": 30.2466,
+    "lng": -97.751,
+    "rating": 4.7,
+    "reviewCount": 89,
+    "email": "socosweets@example.com",
+    "website": "https://example.com/soco-sweets",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "south-congress-sweets", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "sc-1",
+        "url": "/seed/portfolio/shell.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "sc-2",
+        "url": "/seed/portfolio/buttercream.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "sc-3",
+        "url": "/seed/portfolio/rosette.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "frosting:buttercream_american",
+        "confidence": 0.95,
+        "evidenceImageIds": ["sc-2"],
+        "reasoning": "American buttercream finish on cupcakes and cakes."
+      },
+      {
+        "flag": "border:shell",
+        "confidence": 0.8,
+        "evidenceImageIds": ["sc-1"],
+        "reasoning": "Open-star shells around the base."
+      },
+      {
+        "flag": "border:bead",
+        "confidence": 0.7,
+        "evidenceImageIds": ["sc-2"],
+        "reasoning": "Bead border on a single-tier cake."
+      },
+      {
+        "flag": "surface:rosette",
+        "confidence": 0.85,
+        "evidenceImageIds": ["sc-3"],
+        "reasoning": "Rosette clusters on top."
+      },
+      {
+        "flag": "nozzle:open_star",
+        "confidence": 0.8,
+        "evidenceImageIds": ["sc-3"],
+        "reasoning": "Open-star ridges on the rosettes."
+      }
+    ]
+  },
+  {
+    "id": "frost-circle",
+    "name": "Frost Circle",
+    "city": "Austin, TX",
+    "address": "5601 Brodie Ln, Austin, TX",
+    "lat": 30.2315,
+    "lng": -97.8234,
+    "rating": 4.3,
+    "reviewCount": 412,
+    "email": "frostcircle@example.com",
+    "website": "https://example.com/frost-circle",
+    "phone": null,
+    "publishedPrice": "Ice cream cakes listed at $32–$48 (published, confirm with decorator)",
+    "hasLicensedPrintProgram": true,
+    "isChain": true,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "frost-circle", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "fc-1",
+        "url": "/seed/portfolio/print.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "fc-2",
+        "url": "/seed/portfolio/ice-cream.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "fc-3",
+        "url": "/seed/portfolio/buttercream.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "medium:ice_cream",
+        "confidence": 0.95,
+        "evidenceImageIds": ["fc-2"],
+        "reasoning": "Rolled ice cream cakes in the case."
+      },
+      {
+        "flag": "decor:edible_print",
+        "confidence": 0.9,
+        "evidenceImageIds": ["fc-1"],
+        "reasoning": "Edible image sheets on sheet cakes."
+      },
+      {
+        "flag": "decor:licensed_print",
+        "confidence": 0.9,
+        "evidenceImageIds": ["fc-1"],
+        "reasoning": "Licensed character prints through a store program."
+      },
+      {
+        "flag": "frosting:pastry_pride",
+        "confidence": 0.85,
+        "evidenceImageIds": ["fc-2"],
+        "reasoning": "Whipped topping finish."
+      },
+      {
+        "flag": "frosting:buttercream_american",
+        "confidence": 0.6,
+        "evidenceImageIds": ["fc-3"],
+        "reasoning": "Piped buttercream borders on ice cream cakes."
+      }
+    ]
+  },
+  {
+    "id": "hill-country-tiers",
+    "name": "Hill Country Tiers",
+    "city": "Austin, TX",
+    "address": "15801 Hamilton Pool Rd, Austin, TX",
+    "lat": 30.342,
+    "lng": -98.013,
+    "rating": 4.9,
+    "reviewCount": 67,
+    "email": "hillcountry@example.com",
+    "website": "https://example.com/hill-country-tiers",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "hill-country-tiers", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "hc-1",
+        "url": "/seed/portfolio/fondant-tier.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "hc-2",
+        "url": "/seed/portfolio/gold-leaf.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "hc-3",
+        "url": "/seed/portfolio/sculpted.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "structure:tiered",
+        "confidence": 0.93,
+        "evidenceImageIds": ["hc-1"],
+        "reasoning": "Four-tier stacked cakes in the portfolio."
+      },
+      {
+        "flag": "structure:sculpted",
+        "confidence": 0.8,
+        "evidenceImageIds": ["hc-3"],
+        "reasoning": "Carved sculptural cake."
+      },
+      {
+        "flag": "frosting:fondant",
+        "confidence": 0.9,
+        "evidenceImageIds": ["hc-1"],
+        "reasoning": "Fondant covering on formal tiers."
+      },
+      {
+        "flag": "finish:metallicLeaf",
+        "confidence": 0.88,
+        "evidenceImageIds": ["hc-2"],
+        "reasoning": "Heavy gold leaf on a wedding tier."
+      },
+      {
+        "flag": "decor:sculptural",
+        "confidence": 0.82,
+        "evidenceImageIds": ["hc-3"],
+        "reasoning": "Gum-paste sculpture work."
+      },
+      {
+        "flag": "border:ruffle",
+        "confidence": 0.7,
+        "evidenceImageIds": ["hc-1"],
+        "reasoning": "Petal-tip ruffle skirt."
+      }
+    ]
+  },
+  {
+    "id": "mueller-market-cakes",
+    "name": "Mueller Market Cakes",
+    "city": "Austin, TX",
+    "address": "1900 Simond Ave, Austin, TX",
+    "lat": 30.2965,
+    "lng": -97.704,
+    "rating": 4.6,
+    "reviewCount": 140,
+    "email": "mueller@example.com",
+    "website": "https://example.com/mueller-cakes",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "mueller-market-cakes", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "mm-1",
+        "url": "/seed/portfolio/print.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "mm-2",
+        "url": "/seed/portfolio/buttercream.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "mm-3",
+        "url": "/seed/portfolio/shell.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "decor:edible_print",
+        "confidence": 0.86,
+        "evidenceImageIds": ["mm-1"],
+        "reasoning": "Photo cakes with edible images."
+      },
+      {
+        "flag": "frosting:buttercream_american",
+        "confidence": 0.9,
+        "evidenceImageIds": ["mm-2"],
+        "reasoning": "Buttercream finish throughout."
+      },
+      {
+        "flag": "border:shell",
+        "confidence": 0.75,
+        "evidenceImageIds": ["mm-3"],
+        "reasoning": "Shell border on birthday cakes."
+      },
+      {
+        "flag": "structure:tiered",
+        "confidence": 0.55,
+        "evidenceImageIds": ["mm-2"],
+        "reasoning": "One two-tier buttercream cake in the set."
+      }
+    ]
+  },
+  {
+    "id": "barton-buttercream",
+    "name": "Barton Buttercream",
+    "city": "Austin, TX",
+    "address": "1715 Barton Springs Rd, Austin, TX",
+    "lat": 30.2642,
+    "lng": -97.7635,
+    "rating": 4.9,
+    "reviewCount": 54,
+    "email": "barton@example.com",
+    "website": "https://example.com/barton-buttercream",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "barton-buttercream", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "bb-1",
+        "url": "/seed/portfolio/shell.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "bb-2",
+        "url": "/seed/portfolio/rosette.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "bb-3",
+        "url": "/seed/portfolio/basket.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "border:shell",
+        "confidence": 0.92,
+        "evidenceImageIds": ["bb-1"],
+        "reasoning": "Textbook open-star shells."
+      },
+      {
+        "flag": "border:reverse_shell",
+        "confidence": 0.7,
+        "evidenceImageIds": ["bb-1"],
+        "reasoning": "Alternating reverse shells on one cake."
+      },
+      {
+        "flag": "border:bead",
+        "confidence": 0.8,
+        "evidenceImageIds": ["bb-2"],
+        "reasoning": "Bead work at tier seams."
+      },
+      {
+        "flag": "surface:rosette",
+        "confidence": 0.9,
+        "evidenceImageIds": ["bb-2"],
+        "reasoning": "Rosette coverage on a top tier."
+      },
+      {
+        "flag": "surface:basketweave_panel",
+        "confidence": 0.85,
+        "evidenceImageIds": ["bb-3"],
+        "reasoning": "Basketweave side panels."
+      },
+      {
+        "flag": "nozzle:basketweave",
+        "confidence": 0.85,
+        "evidenceImageIds": ["bb-3"],
+        "reasoning": "Tip 47 basketweave demonstrated."
+      },
+      {
+        "flag": "nozzle:open_star",
+        "confidence": 0.9,
+        "evidenceImageIds": ["bb-1"],
+        "reasoning": "Open star used for shells and stars."
+      },
+      {
+        "flag": "frosting:buttercream_swiss",
+        "confidence": 0.7,
+        "evidenceImageIds": ["bb-2"],
+        "reasoning": "Silky Swiss-style finish."
+      }
+    ]
+  },
+  {
+    "id": "downtown-sheet-cakes",
+    "name": "Downtown Sheet Cakes",
+    "city": "Austin, TX",
+    "address": "200 E 6th St, Austin, TX",
+    "lat": 30.2672,
+    "lng": -97.7398,
+    "rating": 4.1,
+    "reviewCount": 38,
+    "email": "sheets@example.com",
+    "website": "https://example.com/downtown-sheets",
+    "phone": null,
+    "publishedPrice": "Quarter sheets from $42 (published, confirm with decorator)",
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "downtown-sheet-cakes", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "ds-1",
+        "url": "/seed/portfolio/buttercream.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "ds-2",
+        "url": "/seed/portfolio/print.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "frosting:buttercream_american",
+        "confidence": 0.9,
+        "evidenceImageIds": ["ds-1"],
+        "reasoning": "Sheet cakes iced in American buttercream."
+      },
+      {
+        "flag": "decor:edible_print",
+        "confidence": 0.7,
+        "evidenceImageIds": ["ds-2"],
+        "reasoning": "One edible photo sheet cake."
+      },
+      {
+        "flag": "border:straight",
+        "confidence": 0.6,
+        "evidenceImageIds": ["ds-1"],
+        "reasoning": "Straight tube border."
+      }
+    ]
+  },
+  {
+    "id": "westlake-fondant-atelier",
+    "name": "Westlake Fondant Atelier",
+    "city": "Austin, TX",
+    "address": "701 S Capital of Texas Hwy, Austin, TX",
+    "lat": 30.293,
+    "lng": -97.827,
+    "rating": 4.9,
+    "reviewCount": 31,
+    "email": "westlake@example.com",
+    "website": "https://example.com/westlake-fondant",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "westlake-fondant-atelier", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "wl-1",
+        "url": "/seed/portfolio/fondant-tier.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "wl-2",
+        "url": "/seed/portfolio/gold-leaf.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "wl-3",
+        "url": "/seed/portfolio/ruffle.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "structure:tiered",
+        "confidence": 0.94,
+        "evidenceImageIds": ["wl-1"],
+        "reasoning": "Tall stacked fondant cakes."
+      },
+      {
+        "flag": "frosting:fondant",
+        "confidence": 0.95,
+        "evidenceImageIds": ["wl-1"],
+        "reasoning": "Fondant is the house finish."
+      },
+      {
+        "flag": "finish:metallicLeaf",
+        "confidence": 0.9,
+        "evidenceImageIds": ["wl-2"],
+        "reasoning": "Gold and silver leaf both shown."
+      },
+      {
+        "flag": "border:ruffle",
+        "confidence": 0.8,
+        "evidenceImageIds": ["wl-3"],
+        "reasoning": "104 ruffle skirt."
+      },
+      {
+        "flag": "nozzle:petal",
+        "confidence": 0.8,
+        "evidenceImageIds": ["wl-3"],
+        "reasoning": "Petal tip used for ruffles and florals."
+      },
+      {
+        "flag": "surface:sugar_floral",
+        "confidence": 0.75,
+        "evidenceImageIds": ["wl-3"],
+        "reasoning": "Sugar flowers on the top tier."
+      }
+    ]
+  },
+  {
+    "id": "round-rock-slice",
+    "name": "Round Rock Slice Co",
+    "city": "Austin, TX",
+    "address": "201 E Main St, Round Rock, TX",
+    "lat": 30.508,
+    "lng": -97.679,
+    "rating": 4.5,
+    "reviewCount": 88,
+    "email": "roundrock@example.com",
+    "website": "https://example.com/round-rock-slice",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "round-rock-slice", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "rr-1",
+        "url": "/seed/portfolio/fondant-tier.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "rr-2",
+        "url": "/seed/portfolio/shell.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "rr-3",
+        "url": "/seed/portfolio/print.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "structure:tiered",
+        "confidence": 0.8,
+        "evidenceImageIds": ["rr-1"],
+        "reasoning": "Two-tier cakes in the window."
+      },
+      {
+        "flag": "frosting:fondant",
+        "confidence": 0.7,
+        "evidenceImageIds": ["rr-1"],
+        "reasoning": "Fondant on wedding cakes."
+      },
+      {
+        "flag": "border:shell",
+        "confidence": 0.75,
+        "evidenceImageIds": ["rr-2"],
+        "reasoning": "Shell borders."
+      },
+      {
+        "flag": "decor:edible_print",
+        "confidence": 0.7,
+        "evidenceImageIds": ["rr-3"],
+        "reasoning": "Edible prints on kids cakes."
+      },
+      {
+        "flag": "finish:metallicLeaf",
+        "confidence": 0.55,
+        "evidenceImageIds": ["rr-1"],
+        "reasoning": "A little gold paint, not leaf — weak evidence."
+      }
+    ]
+  },
+  {
+    "id": "pflugerville-print-cakes",
+    "name": "Pflugerville Print Cakes",
+    "city": "Austin, TX",
+    "address": "100 E Pecan St, Pflugerville, TX",
+    "lat": 30.439,
+    "lng": -97.62,
+    "rating": 4.4,
+    "reviewCount": 73,
+    "email": "pflugerville@example.com",
+    "website": "https://example.com/pflugerville-print",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": true,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "pflugerville-print-cakes", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "pf-1",
+        "url": "/seed/portfolio/print.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "pf-2",
+        "url": "/seed/portfolio/buttercream.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "pf-3",
+        "url": "/seed/portfolio/shell.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "decor:licensed_print",
+        "confidence": 0.88,
+        "evidenceImageIds": ["pf-1"],
+        "reasoning": "Licensed edible image catalog posted."
+      },
+      {
+        "flag": "decor:edible_print",
+        "confidence": 0.9,
+        "evidenceImageIds": ["pf-1"],
+        "reasoning": "Many edible image cakes."
+      },
+      {
+        "flag": "frosting:buttercream_american",
+        "confidence": 0.85,
+        "evidenceImageIds": ["pf-2"],
+        "reasoning": "Buttercream under the prints."
+      },
+      {
+        "flag": "border:shell",
+        "confidence": 0.7,
+        "evidenceImageIds": ["pf-3"],
+        "reasoning": "Shells around printed cakes."
+      },
+      {
+        "flag": "structure:tiered",
+        "confidence": 0.5,
+        "evidenceImageIds": ["pf-2"],
+        "reasoning": "Occasional two-tier birthday cake."
+      }
+    ]
+  },
+  {
+    "id": "cedar-park-creamery",
+    "name": "Cedar Park Creamery",
+    "city": "Austin, TX",
+    "address": "200 S Bell Blvd, Cedar Park, TX",
+    "lat": 30.505,
+    "lng": -97.8205,
+    "rating": 4.6,
+    "reviewCount": 190,
+    "email": "cedarpark@example.com",
+    "website": "https://example.com/cedar-park-creamery",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": true,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "cedar-park-creamery", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "cp-1",
+        "url": "/seed/portfolio/ice-cream.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "cp-2",
+        "url": "/seed/portfolio/print.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "medium:ice_cream",
+        "confidence": 0.95,
+        "evidenceImageIds": ["cp-1"],
+        "reasoning": "Ice cream cakes are the core product."
+      },
+      {
+        "flag": "frosting:pastry_pride",
+        "confidence": 0.9,
+        "evidenceImageIds": ["cp-1"],
+        "reasoning": "Whipped topping."
+      },
+      {
+        "flag": "decor:edible_print",
+        "confidence": 0.8,
+        "evidenceImageIds": ["cp-2"],
+        "reasoning": "Prints on frozen cakes."
+      },
+      {
+        "flag": "decor:licensed_print",
+        "confidence": 0.8,
+        "evidenceImageIds": ["cp-2"],
+        "reasoning": "Licensed prints in the freezer case."
+      }
+    ]
+  },
+  {
+    "id": "buda-gold-leaf",
+    "name": "Buda Gold Leaf",
+    "city": "Austin, TX",
+    "address": "210 Main St, Buda, TX",
+    "lat": 30.081,
+    "lng": -97.843,
+    "rating": 4.8,
+    "reviewCount": 44,
+    "email": "buda@example.com",
+    "website": "https://example.com/buda-gold-leaf",
+    "phone": null,
+    "publishedPrice": null,
+    "hasLicensedPrintProgram": false,
+    "isChain": false,
+    "claimedByUser": false,
+    "lastIndexedAt": "2026-08-01T00:00:00.000Z",
+    "sources": [{ "sourceId": "seed", "externalId": "buda-gold-leaf", "url": null }],
+    "portfolioImages": [
+      {
+        "id": "bg-1",
+        "url": "/seed/portfolio/gold-leaf.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "bg-2",
+        "url": "/seed/portfolio/fondant-tier.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      },
+      {
+        "id": "bg-3",
+        "url": "/seed/portfolio/shell.svg",
+        "attribution": "Seed portfolio",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "capabilities": [
+      {
+        "flag": "finish:metallicLeaf",
+        "confidence": 0.95,
+        "evidenceImageIds": ["bg-1"],
+        "reasoning": "Gold leaf is the signature finish."
+      },
+      {
+        "flag": "structure:tiered",
+        "confidence": 0.88,
+        "evidenceImageIds": ["bg-2"],
+        "reasoning": "Tiered wedding cakes."
+      },
+      {
+        "flag": "frosting:fondant",
+        "confidence": 0.85,
+        "evidenceImageIds": ["bg-2"],
+        "reasoning": "Fondant under the leaf."
+      },
+      {
+        "flag": "border:shell",
+        "confidence": 0.7,
+        "evidenceImageIds": ["bg-3"],
+        "reasoning": "Shells at the base."
+      },
+      {
+        "flag": "decor:edible_print",
+        "confidence": 0.4,
+        "evidenceImageIds": ["bg-2"],
+        "reasoning": "Weak — one printed topper, not a program."
+      }
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "types": [
+    { "id": "buttercream_american", "label": "American buttercream", "rarity": 0.05 },
+    { "id": "buttercream_swiss", "label": "Swiss meringue buttercream", "rarity": 0.35 },
+    { "id": "buttercream_italian", "label": "Italian meringue buttercream", "rarity": 0.4 },
+    { "id": "pastry_pride", "label": "Whipped topping", "rarity": 0.3 },
+    { "id": "whipped_stabilized", "label": "Stabilized whipped cream", "rarity": 0.35 },
+    { "id": "fondant", "label": "Fondant", "rarity": 0.45 },
+    { "id": "ganache", "label": "Ganache", "rarity": 0.5 },
+    { "id": "cream_cheese", "label": "Cream cheese", "rarity": 0.25 },
+    { "id": "royal_icing", "label": "Royal icing", "rarity": 0.6 }
+  ]
+}
