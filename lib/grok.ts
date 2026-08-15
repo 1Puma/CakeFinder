@@ -21,6 +21,7 @@ type GrokOptions = {
   temperature?: number;
   jsonMode?: boolean;
   maxTokens?: number;
+  timeoutMs?: number;
   fetchImpl?: typeof fetch;
   retries?: number;
 };
@@ -57,6 +58,9 @@ export function describeGrokError(error: GrokError): string {
     case "parse":
       return "Grok returned a response that was not a spec. The photo reached xAI; the model output could not be read.";
     case "network":
+      if (error.message.includes("too long")) {
+        return "xAI took too long to read the photo. Try a smaller JPEG and try once.";
+      }
       return `Could not reach xAI (${error.message}).`;
     default: {
       const _never: never = error;
@@ -72,9 +76,12 @@ export async function grokComplete(options: GrokOptions): Promise<Result<string,
   }
   const fetchImpl = options.fetchImpl ?? fetch;
   const retries = options.retries ?? 2;
+  const timeoutMs = options.timeoutMs ?? 90_000;
   let lastError: GrokError = { kind: "network", message: "no attempt" };
 
   for (let attempt = 0; attempt < retries; attempt += 1) {
+    const ac = new AbortController();
+    const timer = setTimeout(() => ac.abort(), timeoutMs);
     try {
       const response = await fetchImpl(`${env.GROK_BASE_URL}/chat/completions`, {
         method: "POST",
@@ -82,6 +89,7 @@ export async function grokComplete(options: GrokOptions): Promise<Result<string,
           Authorization: `Bearer ${env.GROK_API_KEY}`,
           "Content-Type": "application/json",
         },
+        signal: ac.signal,
         body: JSON.stringify({
           model: env.GROK_MODEL,
           messages: options.messages,
@@ -112,11 +120,19 @@ export async function grokComplete(options: GrokOptions): Promise<Result<string,
       }
       return ok(content);
     } catch (error) {
+      if (ac.signal.aborted) {
+        return err({
+          kind: "network",
+          message: "xAI took too long to read the photo.",
+        });
+      }
       lastError = {
         kind: "network",
         message: error instanceof Error ? error.message : "network error",
       };
       await sleep(400 * 2 ** attempt);
+    } finally {
+      clearTimeout(timer);
     }
   }
   return err(lastError);

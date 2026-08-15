@@ -124,53 +124,20 @@ export async function decompose(input: {
           ],
         },
       ],
+      jsonMode: false,
+      retries: 1,
+      timeoutMs: 90_000,
       maxTokens: 4096,
     },
     parseVision,
   );
 
-  let vision = parsed.ok ? parsed.value : null;
   if (!parsed.ok) {
     console.error("decompose grok failed", grokLog(parsed.error));
-    if (parsed.error.kind !== "parse") {
-      return err({ kind: "vision", message: describeGrokError(parsed.error) });
-    }
-    const retryPrompt = decomposePrompt({
-      schema: schemaHint(),
-      retryError: parsed.error.raw.slice(0, 1500),
-    });
-    const retried = await grokJson(
-      {
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "image_url", image_url: { url: sourceImageUrl, detail: "high" } },
-              { type: "text", text: retryPrompt },
-            ],
-          },
-        ],
-        jsonMode: false,
-        maxTokens: 4096,
-      },
-      parseVision,
-    );
-    if (!retried.ok) {
-      console.error("decompose grok retry failed", grokLog(retried.error));
-      return err({ kind: "vision", message: describeGrokError(retried.error) });
-    }
-    vision = retried.value;
+    return err({ kind: "vision", message: describeGrokError(parsed.error) });
   }
 
-  if (!vision) {
-    return err({
-      kind: "vision",
-      message:
-        "Grok returned a response that was not a spec. The photo reached xAI; the model output could not be read.",
-    });
-  }
-
-  let spec = toCakeSpec(vision, sourceImageUrl);
+  let spec = toCakeSpec(parsed.value, sourceImageUrl);
   spec = hydrateDerivedTips(applyMediumConstraints(spec));
   spec.structure.supportRequired = spec.structure.tierCount > 1;
   await saveSpec(spec);
