@@ -16,7 +16,10 @@ import { coverage, rankMatches, scoreDecorator } from "./score";
 import { makeTraceStep } from "./trace";
 import { matchPlanPrompt } from "../../prompts/match-plan";
 
-const MATCH_THRESHOLD = 0.45;
+/** Partial overlap is enough. 0.45 dropped shops that only hit the rare flag. */
+export const MATCH_THRESHOLD = 0.18;
+const SPARSE_MATCH_COUNT = 5;
+const NEARBY_FALLBACK_COUNT = 8;
 
 async function planLimiting(required: CapabilityFlag[]): Promise<{
   limiting: CapabilityFlag[];
@@ -52,6 +55,22 @@ async function planLimiting(required: CapabilityFlag[]): Promise<{
   return planned.ok ? planned.value : fallback;
 }
 
+export function pickMatches(scored: Match[]): Match[] {
+  const ranked = rankMatches(scored);
+  const above = ranked.filter((m) => coverage(m) >= MATCH_THRESHOLD);
+  if (above.length >= SPARSE_MATCH_COUNT) return above;
+  if (above.length === 0) return ranked.slice(0, NEARBY_FALLBACK_COUNT);
+  const ids = new Set(above.map((m) => m.decorator.id));
+  const padded = [...above];
+  for (const match of ranked) {
+    if (padded.length >= SPARSE_MATCH_COUNT) break;
+    if (ids.has(match.decorator.id)) continue;
+    padded.push(match);
+    ids.add(match.decorator.id);
+  }
+  return padded;
+}
+
 export async function matchDecorators(input: {
   spec: CakeSpec;
   city: string;
@@ -69,8 +88,8 @@ export async function matchDecorators(input: {
   const plan = await planLimiting(required);
   emit("plan", `Limiting constraint: ${plan.limiting.join(" + ")}. ${plan.rationale}`);
 
-  let radius = input.radiusMiles;
   const env = getEnv();
+  let radius = Math.max(input.radiusMiles, env.DEFAULT_RADIUS_MILES);
   let decorators = await crawlCity(input.city, radius);
   decorators = (
     await Promise.all(decorators.map(async (d) => ((await isSuppressed(d.id)) ? null : d)))
@@ -97,15 +116,15 @@ export async function matchDecorators(input: {
   emit("evaluate", `Scored ${scored.length} shops against ${required.length} required flags.`);
 
   const substitutions: Substitution[] = [];
-  let matches = scored.filter((m) => coverage(m) >= MATCH_THRESHOLD);
+  let matches = pickMatches(scored);
 
-  if (matches.length < 3 && radius < env.MAX_RADIUS_MILES) {
-    const next = Math.min(env.MAX_RADIUS_MILES, radius + 10);
-    emit("replan", `Widened radius ${radius}→${next}mi to clear match threshold.`);
+  if (matches.length < SPARSE_MATCH_COUNT && radius < env.MAX_RADIUS_MILES) {
+    const next = env.MAX_RADIUS_MILES;
+    emit("replan", `Widened radius ${radius}→${next}mi to find more local shops.`);
     radius = next;
     decorators = await crawlCity(input.city, radius);
     scored = evaluate(decorators, radius);
-    matches = scored.filter((m) => coverage(m) >= MATCH_THRESHOLD);
+    matches = pickMatches(scored);
   }
 
   if (matches.length > 15) {

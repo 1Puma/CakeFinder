@@ -138,8 +138,8 @@ export function MatchWorkspace(props: { specId: string }) {
         ) : null}
         {result && result.matches.length === 0 ? (
           <p>
-            Nothing within {radius} miles covers the rarest requirements. Widen the radius, or drop
-            gold leaf / licensed print and search again.
+            Nothing within {radius} miles of this city. Try a nearby city name, or drop gold leaf /
+            licensed print and search again.
           </p>
         ) : null}
         <div className="grid gap-4 md:grid-cols-2 desk:grid-cols-3">

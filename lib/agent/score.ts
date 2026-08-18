@@ -2,8 +2,14 @@ import { flagCategory, rarityScore } from "../capability";
 import { cityCenter, haversineMiles } from "../geo";
 import type { CapabilityFlag, Decorator, Match } from "../types";
 
+/** Inferred capabilities below this used to be ignored; 0.3 still counts a weak photo match. */
+export const FLAG_CONFIDENCE_MIN = 0.3;
+
+/** Crawled Places/Yelp shops have empty capabilities. Treat them as local, not as coverage 0. */
+export const UNKNOWN_SHOP_COVERAGE = 0.22;
+
 export function decoratorHasFlag(decorator: Decorator, flag: CapabilityFlag): boolean {
-  return decorator.capabilities.some((c) => c.flag === flag && c.confidence >= 0.5);
+  return decorator.capabilities.some((c) => c.flag === flag && c.confidence >= FLAG_CONFIDENCE_MIN);
 }
 
 export function scoreDecorator(
@@ -50,6 +56,9 @@ function buildReasoning(
 ): string {
   const hits = matched.slice(0, 3).map(humanFlag).join(", ");
   const miss = missing.slice(0, 2).map(humanFlag).join(", ");
+  if (decorator.capabilities.length === 0) {
+    return "Local cake shop — techniques not indexed yet.";
+  }
   if (matched.length === 0) {
     return `No demonstrated overlap with this spec in the indexed photos.`;
   }
@@ -76,6 +85,9 @@ export function rankMatches(matches: Match[]): Match[] {
 }
 
 export function coverage(match: Match): number {
+  if (match.decorator.capabilities.length === 0) {
+    return UNKNOWN_SHOP_COVERAGE;
+  }
   const all = [...match.matchedFlags, ...match.missingFlags];
   const weightMatched = match.matchedFlags.reduce((sum, flag) => sum + rarityScore(flag), 0);
   const weightAll = all.reduce((sum, flag) => sum + rarityScore(flag), 0);

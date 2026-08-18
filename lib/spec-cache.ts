@@ -1,6 +1,7 @@
 import type { CakeSpec } from "@/lib/taxonomy";
 import { cakeSpecSchema } from "@/lib/taxonomy";
 import { mergeSummaries } from "@/lib/summaries";
+import { DEFAULT_RADIUS_MILES } from "@/lib/radius";
 
 const prefix = "cakematch:spec:v2:";
 
@@ -37,6 +38,9 @@ export function persistMatchCity(city: string, radiusMiles: number): void {
 export function readMatchCity(): { city: string; radiusMiles: number } {
   return {
     city: sessionStorage.getItem("cakematch:city") ?? "Austin, TX",
-    radiusMiles: Number(sessionStorage.getItem("cakematch:radius") ?? "15"),
+    radiusMiles: Math.max(
+      DEFAULT_RADIUS_MILES,
+      Number(sessionStorage.getItem("cakematch:radius") ?? DEFAULT_RADIUS_MILES),
+    ),
   };
 }
