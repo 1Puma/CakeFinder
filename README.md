@@ -1,6 +1,8 @@
 # CakeMatch
 
-Upload a cake photo. Get a buildable spec. Find local decorators who can make it.
+Upload a cake photo. A vision model decomposes it into a structured, buildable spec — tiers, borders, nozzle work, colors — against a versioned taxonomy, then matches it to local decorators who can actually make it.
+
+Built with Next.js 15 (App Router, Server Components/Actions), Prisma, and Zod-validated LLM boundaries — every model and external API response is validated before it touches the app, since model output is treated as untrusted input throughout.
 
 ## Local
 
@@ -32,6 +34,6 @@ SQLite will not persist on serverless. The running app uses the Austin seed plus
 
 Required for live vision: `GROK_API_KEY`, `GROK_MODEL=grok-4.6`. Optional: Places, Yelp, Resend.
 
-## Product rules
+## Design notes
 
-See `AGENTS.md` and `cake-app-build-spec.md`.
+The taxonomy (border types, nozzle families, frosting types) lives in `/data/taxonomy/*.json`, not hardcoded in components — extending what the vision model can recognize is a JSON edit, not a code change. Full product and build rules are in `AGENTS.md` and `cake-app-build-spec.md`.
